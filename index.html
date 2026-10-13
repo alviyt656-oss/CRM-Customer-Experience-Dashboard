@@ -89,7 +89,7 @@ const OPT={
  fak:['Internal','Eksternal'],
  jen:['Fullfilment','Logistik','Miss Information'],
  sol:['Tukar','Pengembalian','Kirim Ulang']};
-const DEFAULT_URL='https://script.google.com/macros/s/AKfycbwg_tunb3Yv3vWB_M6xfGgSYRT7U7wYTP45Pc43o9h4AJj4lLFlZFufIG0HYyV55zdOaw/exec',
+const DEFAULT_URL='https://script.google.com/macros/s/AKfycbypDmWbJvNNW3k3wrBPTfjkqKYbhaD-dkDGPDlQYPQLAbPOxZH1N5CTTY65J2eKYA_XzQ/exec',
 DEFAULT_TOKEN='1T-JawA4dPNTrNmdwPBLI90oKRwpm7kL4cKgrTQHPaPw'; // langsung terhubung tanpa menu Pengaturan
 /* ============================================================================== */
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -97,11 +97,17 @@ const CLR=['--c1','--c2','--c3','--c4','--c5','--c6'],cv=i=>`var(${CLR[i%6]})`,r
 const LS='cxk-cfg';let cfg={url:DEFAULT_URL,token:DEFAULT_TOKEN},rows=[],period=30,fil='Semua';
 try{Object.assign(cfg,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){}
 const toast=(m,ms=3500)=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',ms)};
-const ymd=s=>{s=String(s??'').trim();let m;
- if(m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))return new Date(+m[1],m[2]-1,+m[3]).getTime();
- if(m=s.match(/^(\d{1,2})[\/.-](\d{1,2})(?:[\/.-](\d{2,4}))?/)){let y=m[3]?+m[3]:new Date().getFullYear();if(y<100)y+=2000;return new Date(y,m[2]-1,+m[1]).getTime()}
+
+/* Parser tanggal toleran: 2026-10-14, 14/10/2026, 14-10-26, 14 Okt 2026, Selasa, 14 Oktober 2026, 14/10, serial Excel */
+const BLN={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,agt:8,aug:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
+const ymd=s=>{s=String(s??'').trim().toLowerCase();let m;
+ const mk=(y,mo,d)=>{if(y<100)y+=2000;const t=new Date(y,mo-1,d);return t.getMonth()===mo-1?t.getTime():NaN};
+ if(m=s.match(/(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})/))return mk(+m[1],+m[2],+m[3]);          // 2026-10-14
+ if(m=s.match(/(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/))return mk(+m[3],+m[2],+m[1]);        // 14/10/2026, 14-10-26
+ if(m=s.match(/(\d{1,2})[\s\/.-]*([a-z]{3,})[\s,\/.-]*(\d{2,4})/)){const mo=BLN[m[2].slice(0,3)];if(mo)return mk(+m[3],mo,+m[1])} // 14 Okt 2026, 14-Oktober-26
+ if(m=s.match(/^(\d{1,2})[\/.-](\d{1,2})$/))return mk(new Date().getFullYear(),+m[2],+m[1]);  // 14/10
  if(/^\d{5}$/.test(s))return new Date(Math.round((+s-25569)*864e5)+new Date().getTimezoneOffset()*6e4).getTime();
- return NaN};
+ const d=Date.parse(s);return isNaN(d)?NaN:d};
 const today=()=>{const t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')};
 
 /* ---------- API ---------- */
@@ -116,10 +122,10 @@ async function reload(){const st=$('#st');
  if(!cfg.url){rows=sample();st.textContent='Mode demo';st.classList.add('off');refresh();return}
  st.textContent='Memuat…';st.classList.remove('off');
  try{const j=await api('list');if(!j.ok)throw new Error(j.error);
-  const all=j.rows.map(r=>({...r,tgl:ymd(r.tgl)})),bad=all.filter(r=>isNaN(r.tgl));
+  const all=j.rows.map(r=>({...r,tgl:ymd(r.tgl),tglRaw:r.tgl})),bad=all.filter(r=>isNaN(r.tgl));
   rows=all.filter(r=>!isNaN(r.tgl)).sort((a,b)=>a.tgl-b.tgl||a.row-b.row);st.textContent='Terhubung · '+rows.length+' baris';refresh();
   if(!all.length)toast(j.info?`Terbaca dari spreadsheet "${j.info.ss}". Tab: ${j.info.tabs.join(', ')}. Baris terisi di tab "${j.info.tab}": ${j.info.lastRow}. Kalau ini bukan sheet kamu, Apps Script terpasang di spreadsheet lain.`:'Sheet terbaca kosong. Pasang Code.gs terbaru lalu deploy versi baru.',20000);
-  else if(bad.length)toast(bad.length+' baris diabaikan: tanggal (kolom H) tidak terbaca')}
+  else if(bad.length)toast(bad.length+' baris diabaikan, tanggal tidak terbaca. Contoh isi: "'+bad[0].tglRaw+'" (baris '+bad[0].row+')',12000)}
  catch(e){st.textContent='Gagal terhubung';st.classList.add('off');toast('Gagal memuat: '+e.message)}}
 function refresh(){render();intro();recent()}
 
