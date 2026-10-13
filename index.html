@@ -85,11 +85,12 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#0a0e19;font-weight
 /* ===== KONFIGURASI: ubah pilihan dropdown di sini agar sama dengan sheet ===== */
 const OPT={
  ch:['Shopee Safwan','Shopee Ansan','Tiktok Safwan','Tiktok Ansan','Shopee Basyira','Meta LP'],
- pic:['Vika','Agus','Bimo','Dedi','Freelance','OXAR'],
+ pic:['Rika','Agus','Bimo','Dedi','Freelance','OXAR'],
  fak:['Internal','Eksternal'],
  jen:['Fullfilment','Logistik','Miss Information'],
  sol:['Tukar','Pengembalian']};
-const DEFAULT_URL='',DEFAULT_TOKEN=''; // opsional: isi agar tidak perlu menu Pengaturan
+const DEFAULT_URL='https://script.google.com/macros/s/AKfycbw1jAHIdYi5Q9uk-VXFOA07tVA1RQ1nWJKp9QGlwuurVFGMcgKuka37CME0INHNKLwoaA/exec',
+DEFAULT_TOKEN='1T-JawA4dPNTrNmdwPBLI90oKRwpm7kL4cKgrTQHPaPw'; // langsung terhubung tanpa menu Pengaturan
 /* ============================================================================== */
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const CLR=['--c1','--c2','--c3','--c4','--c5','--c6'],cv=i=>`var(${CLR[i%6]})`,rp=n=>'Rp'+Math.round(n).toLocaleString('id-ID'),DAY=864e5;
