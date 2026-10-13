@@ -96,7 +96,7 @@ const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>(
 const CLR=['--c1','--c2','--c3','--c4','--c5','--c6'],cv=i=>`var(${CLR[i%6]})`,rp=n=>'Rp'+Math.round(n).toLocaleString('id-ID'),DAY=864e5;
 const LS='cxk-cfg';let cfg={url:DEFAULT_URL,token:DEFAULT_TOKEN},rows=[],period=30,fil='Semua';
 try{Object.assign(cfg,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){}
-const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500)};
+const toast=(m,ms=3500)=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',ms)};
 const ymd=s=>{s=String(s??'').trim();let m;
  if(m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))return new Date(+m[1],m[2]-1,+m[3]).getTime();
  if(m=s.match(/^(\d{1,2})[\/.-](\d{1,2})(?:[\/.-](\d{2,4}))?/)){let y=m[3]?+m[3]:new Date().getFullYear();if(y<100)y+=2000;return new Date(y,m[2]-1,+m[1]).getTime()}
@@ -118,7 +118,7 @@ async function reload(){const st=$('#st');
  try{const j=await api('list');if(!j.ok)throw new Error(j.error);
   const all=j.rows.map(r=>({...r,tgl:ymd(r.tgl)})),bad=all.filter(r=>isNaN(r.tgl));
   rows=all.filter(r=>!isNaN(r.tgl)).sort((a,b)=>a.tgl-b.tgl||a.row-b.row);st.textContent='Terhubung · '+rows.length+' baris';refresh();
-  if(!all.length)toast('Sheet terbaca kosong. Cek nama tab dan kolom ID Pesanan (C) terisi.');
+  if(!all.length)toast(j.info?`Terbaca dari spreadsheet "${j.info.ss}". Tab: ${j.info.tabs.join(', ')}. Baris terisi di tab "${j.info.tab}": ${j.info.lastRow}. Kalau ini bukan sheet kamu, Apps Script terpasang di spreadsheet lain.`:'Sheet terbaca kosong. Pasang Code.gs terbaru lalu deploy versi baru.',20000);
   else if(bad.length)toast(bad.length+' baris diabaikan: tanggal (kolom H) tidak terbaca')}
  catch(e){st.textContent='Gagal terhubung';st.classList.add('off');toast('Gagal memuat: '+e.message)}}
 function refresh(){render();intro();recent()}
