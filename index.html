@@ -16,20 +16,30 @@ main{overflow:auto;padding:0 22px 22px;min-width:0}
 header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 0;position:sticky;top:0;background:var(--bg);z-index:3}
 header h1{font-size:18px;margin:0 auto 0 0;display:flex;gap:10px;align-items:center}
 .live{font-size:11px;font-weight:600;color:var(--ac);border:1px solid var(--line);background:var(--card);border-radius:20px;padding:2px 10px}.live.off{color:var(--c6)}
-button,select,input{font:inherit;color:var(--tx)}
+button,select,input,textarea{font:inherit;color:var(--tx)}
 button{cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:500}button:hover{border-color:var(--mu)}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 button.pri{background:var(--ac);border-color:var(--ac);color:#0a0e19;font-weight:700}button:disabled{opacity:.5;cursor:wait}
+.fbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.fsel{display:flex;gap:8px;flex-wrap:wrap}
+.fbar select,.fbar input{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px}.fbar .seg{margin-left:auto}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
 .kpi small{color:var(--mu);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}.kpi b{display:block;font-size:28px;font-weight:800;margin:6px 0 2px;letter-spacing:-.02em}
 .kpi span{font-size:12px;font-weight:600}.up{color:var(--ac)}.dn{color:var(--rd)}
 .row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;margin-top:14px}.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
 .hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px}.hd h3{margin:0;font-size:14px;font-weight:700}
 .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.seg button{border:0;border-radius:0;background:none;padding:4px 10px;font-size:12px;color:var(--mu)}.seg button.on{background:var(--acd);color:var(--ac);font-weight:700}
-.donut{display:flex;align-items:center;gap:18px}.leg{flex:1;font-size:13px}.leg div{display:flex;align-items:center;gap:8px;padding:3px 0}.leg i{width:8px;height:8px;border-radius:50%}.leg em{margin-left:auto;font-style:normal;font-weight:700}
-.bar{margin:9px 0}.bar p{display:flex;justify-content:space-between;margin:0 0 4px;font-size:13px}.bar p span{color:var(--mu)}.bar div{height:7px;background:var(--card2);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;border-radius:4px}
-.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}th{text-align:left;color:var(--mu);font-size:11px;font-weight:600;padding:8px}td{padding:10px 8px;border-top:1px solid var(--line)}
+.donut{display:flex;align-items:center;gap:18px}.leg{flex:1;font-size:13px}.leg div{display:flex;align-items:center;gap:8px;padding:3px 6px;border-radius:6px}.leg i{width:8px;height:8px;border-radius:50%}.leg em{margin-left:auto;font-style:normal;font-weight:700}
+.lg2{display:flex;gap:14px;font-size:12px;color:var(--mu);margin-bottom:6px}.lg2 i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.clk{cursor:pointer}.clk:hover{background:var(--acd)}.act{outline:2px solid var(--ac);outline-offset:-1px;border-radius:6px}
+.bar{margin:6px 0;padding:4px 6px;border-radius:6px}.bar p{display:flex;justify-content:space-between;gap:8px;margin:0 0 4px;font-size:13px}.bar p span{color:var(--mu);white-space:nowrap}.bar div{height:7px;background:var(--card2);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;border-radius:4px;animation:grow .55s ease-out}
+@keyframes grow{from{width:0}}
+.hm{border-collapse:separate;border-spacing:3px;min-width:0;width:100%}.hm th{font-size:10px;text-align:center;padding:2px;color:var(--mu);font-weight:600}.hm th.rl{text-align:left;font-size:12px;white-space:nowrap}
+.hm td{border:0;text-align:center;border-radius:6px;padding:10px 2px;font-weight:700;cursor:pointer}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:680px}th{text-align:left;color:var(--mu);font-size:11px;font-weight:600;padding:8px}td{padding:10px 8px;border-top:1px solid var(--line)}
+td.kt{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mu)}
 .tag{display:inline-block;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700}.t-int{background:rgba(248,113,113,.15);color:var(--rd)}.t-ext{background:rgba(250,204,21,.16);color:var(--c6)}
+.ab{border-left:3px solid var(--mu);background:var(--card2);border-radius:8px;padding:10px 14px;margin-bottom:10px}.ab.bad{border-color:var(--rd)}.ab.mid{border-color:var(--c6)}.ab.low{border-color:var(--c5)}
+.ab h4{margin:0 0 6px;font-size:13px}.ab ul{margin:0;padding-left:18px;font-size:13px}.ab li{margin:3px 0}
 .panel{background:var(--side);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
 .ph{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}.ph i{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--c5),var(--c1))}.ph small{display:block;color:var(--mu);font-size:12px}
 .chat{flex:1;overflow:auto;padding:16px 18px;min-height:0}.who{font-size:11px;color:var(--mu);margin:12px 0 4px}.who.me{text-align:right}
@@ -38,11 +48,15 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#0a0e19;font-weight
 .chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;border-top:1px solid var(--line)}.chips button{font-size:12px;padding:6px 11px;border-radius:20px}
 .empty{color:var(--mu);padding:16px;text-align:center}.v{display:none}.v.on{display:block}
 .form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.form label{display:block;font-size:12px;color:var(--mu);font-weight:600;margin-bottom:4px}
-.form input,.form select,.cfg input{width:100%;background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+.form input,.form select,.form textarea,.cfg input{width:100%;background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:9px 10px}.form textarea{resize:vertical}
 .cfg{max-width:560px;display:grid;gap:12px}.cfg label{font-size:12px;color:var(--mu);font-weight:600}.note{color:var(--mu);font-size:12px;margin:0}
-#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-weight:600;display:none;z-index:9}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-weight:600;display:none;z-index:9;max-width:92vw}
+#tip{position:fixed;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;z-index:20;display:none;max-width:260px}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:12px;width:min(520px,92vw);padding:18px}dialog::backdrop{background:rgba(0,0,0,.6)}
+.dl{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:13px}.dl dt{color:var(--mu)}.dl dd{margin:0;word-break:break-word}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:1100px){.app,.app.np{display:block;height:auto}aside{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-right:0;border-bottom:1px solid var(--line)}aside .logo{display:none}aside a{white-space:nowrap;margin:0}main{overflow:visible}.panel{border-left:0;border-top:1px solid var(--line)}.chat{max-height:420px}}
-@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.row,.row3,.form{grid-template-columns:1fr}.donut{flex-direction:column;align-items:flex-start}}
+@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.row,.row3,.form{grid-template-columns:1fr}.donut{flex-direction:column;align-items:flex-start}.fbar .seg{margin-left:0}}
 </style></head><body>
 <div class="app" id="app">
 <aside><div class="logo"><b>CX</b>Komplain CX</div>
@@ -52,20 +66,32 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#0a0e19;font-weight
 <header><h1 id="ttl">Dashboard Customer Experience</h1><span class="live" id="st">Memuat…</span><button id="bRef">Muat Ulang</button></header>
 
 <div class="v on" id="v-dash">
+<section class="fbar"><div class="fsel" id="fsel"></div><button id="bRst">Reset filter</button>
+<div class="seg" id="per"><button data-p="7">7H</button><button data-p="30" class="on">30H</button><button data-p="90">90H</button></div></section>
+
 <section class="kpis" id="kpis"></section>
-<section class="row"><div class="card"><div class="hd"><h3>Tren Komplain Harian</h3><div class="seg" id="per"><button data-p="7">7H</button><button data-p="30" class="on">30H</button><button data-p="90">90H</button></div></div><div id="trend"></div></div>
+
+<section class="row"><div class="card"><div class="hd"><h3>Komplain Harian: Internal vs Eksternal</h3></div><div id="trend"></div></div>
 <div class="card"><div class="hd"><h3>Distribusi Channel</h3></div><div class="donut" id="donut"></div></div></section>
+
+<section class="row"><div class="card"><div class="hd"><h3>Peta Kesalahan (Jenis × <span id="hmL">PIC</span>)</h3><div class="seg" id="hmSeg"><button data-hm="pic" class="on">PIC</button><button data-hm="ch">Channel</button></div></div><div id="heat"></div><p class="note" style="margin-top:8px">Makin merah, makin banyak kesalahan. Klik sel untuk memfilter.</p></div>
+<div class="card"><div class="hd"><h3>Kesalahan Tertinggi (Jenis · Faktor · PIC)</h3></div><div id="rank"></div></div></section>
+
+<section class="card" style="margin-top:14px"><div class="hd"><h3>Saran Perbaikan</h3><span class="note">dihitung otomatis dari data yang sedang difilter</span></div><div id="adv"></div></section>
+
 <section class="row3"><div class="card"><div class="hd"><h3>Jenis Komplain</h3></div><div id="bJenis"></div></div>
 <div class="card"><div class="hd"><h3>Komplain per PIC Packing</h3></div><div id="bPic"></div></div>
 <div class="card"><div class="hd"><h3>Solusi yang Ditawarkan</h3></div><div id="bSol"></div></div></section>
-<section class="card" style="margin-top:14px"><div class="hd"><h3>Komplain Terbaru</h3><div class="seg" id="fil"><button class="on">Semua</button><button>Internal</button><button>Eksternal</button></div></div>
-<div class="tw"><table><thead><tr><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>Faktor</th><th>PIC</th><th>Solusi</th><th>Rating</th><th>Ongkir</th></tr></thead><tbody id="tb"></tbody></table></div></section>
+
+<section class="card" style="margin-top:14px"><div class="hd"><h3>Komplain Terbaru</h3><input id="qs" type="search" placeholder="Cari ID, channel, PIC, keterangan…" style="background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;min-width:220px"></div>
+<div class="tw"><table><thead><tr><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>Faktor</th><th>PIC</th><th>Solusi</th><th>Rating</th><th>Ongkir</th><th>Keterangan</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span class="note" id="cntTb"></span><button id="bMore">Lihat lebih banyak</button></div></section>
 </div>
 
 <div class="v" id="v-input">
 <section class="card"><div class="hd"><h3>Input Komplain Harian</h3></div><form class="form" id="frm" onsubmit="return false"></form>
 <p class="note" id="fnote" style="margin:12px 0"></p><button class="pri" id="bSave">Simpan ke Sheet</button></section>
-<section class="card" style="margin-top:14px"><div class="hd"><h3>Data Terakhir Masuk</h3></div><div class="tw"><table><thead><tr><th>Baris</th><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>PIC</th><th></th></tr></thead><tbody id="tbi"></tbody></table></div></section>
+<section class="card" style="margin-top:14px"><div class="hd"><h3>Data Terakhir Masuk</h3></div><div class="tw"><table><thead><tr><th>Baris</th><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>PIC</th><th>Keterangan</th><th></th></tr></thead><tbody id="tbi"></tbody></table></div></section>
 </div>
 
 <div class="v" id="v-set"><section class="card cfg"><h3 style="margin:0">Koneksi ke Google Sheet</h3>
@@ -77,9 +103,10 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#0a0e19;font-weight
 
 <div class="panel"><div class="ph"><i></i><div><b>Analis Komplain</b><small>Ringkasan otomatis dari data</small></div></div>
 <div class="chat" id="chat"></div>
-<div class="chips" id="chips"><button data-q="cause">Penyebab terbesar</button><button data-q="pic">PIC terbanyak</button><button data-q="chan">Channel bermasalah</button><button data-q="rate">Dampak rating</button></div></div>
+<div class="chips" id="chips"><button data-q="fix">Saran perbaikan</button><button data-q="cause">Penyebab terbesar</button><button data-q="pic">PIC terbanyak</button><button data-q="chan">Channel bermasalah</button><button data-q="rate">Dampak rating</button></div></div>
 </div>
-<div id="toast"></div>
+<dialog id="dlg"><div class="hd"><h3>Detail Komplain</h3><button id="dX">Tutup</button></div><dl class="dl" id="dB"></dl></dialog>
+<div id="toast"></div><div id="tip"></div>
 
 <script>
 /* ===== KONFIGURASI: ubah pilihan dropdown di sini agar sama dengan sheet ===== */
@@ -89,12 +116,13 @@ const OPT={
  fak:['Internal','Eksternal'],
  jen:['Fullfilment','Logistik','Miss Information'],
  sol:['Tukar','Pengembalian','Kirim Ulang']};
-const DEFAULT_URL='https://script.google.com/macros/s/AKfycbypDmWbJvNNW3k3wrBPTfjkqKYbhaD-dkDGPDlQYPQLAbPOxZH1N5CTTY65J2eKYA_XzQ/exec',
+const DEFAULT_URL='https://script.google.com/macros/s/AKfycbyBdVNjEc16F7023Ip_UlH3gz4g1p0lu1WB_i9EZUcde0urQuSiU35ngGNQfnSh4bWdcQ/exec',
 DEFAULT_TOKEN='1T-JawA4dPNTrNmdwPBLI90oKRwpm7kL4cKgrTQHPaPw'; // langsung terhubung tanpa menu Pengaturan
 /* ============================================================================== */
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const CLR=['--c1','--c2','--c3','--c4','--c5','--c6'],cv=i=>`var(${CLR[i%6]})`,rp=n=>'Rp'+Math.round(n).toLocaleString('id-ID'),DAY=864e5;
-const LS='cxk-cfg';let cfg={url:DEFAULT_URL,token:DEFAULT_TOKEN},rows=[],period=30,fil='Semua';
+const fd=t=>new Date(t).toLocaleDateString('id-ID',{day:'numeric',month:'short'}),fa=o=>`data-f="${esc(JSON.stringify(o))}"`;
+const LS='cxk-cfg';let cfg={url:DEFAULT_URL,token:DEFAULT_TOKEN},rows=[],period=30,hm='pic',lim=10,q='',flt={ch:'',pic:'',fak:'',jen:'',sol:''};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){}
 const toast=(m,ms=3500)=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',ms)};
 
@@ -102,10 +130,10 @@ const toast=(m,ms=3500)=>{const t=$('#toast');t.textContent=m;t.style.display='b
 const BLN={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,agt:8,aug:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
 const ymd=s=>{s=String(s??'').trim().toLowerCase();let m;
  const mk=(y,mo,d)=>{if(y<100)y+=2000;const t=new Date(y,mo-1,d);return t.getMonth()===mo-1?t.getTime():NaN};
- if(m=s.match(/(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})/))return mk(+m[1],+m[2],+m[3]);          // 2026-10-14
- if(m=s.match(/(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/))return mk(+m[3],+m[2],+m[1]);        // 14/10/2026, 14-10-26
- if(m=s.match(/(\d{1,2})[\s\/.-]*([a-z]{3,})[\s,\/.-]*(\d{2,4})/)){const mo=BLN[m[2].slice(0,3)];if(mo)return mk(+m[3],mo,+m[1])} // 14 Okt 2026, 14-Oktober-26
- if(m=s.match(/^(\d{1,2})[\/.-](\d{1,2})$/))return mk(new Date().getFullYear(),+m[2],+m[1]);  // 14/10
+ if(m=s.match(/(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})/))return mk(+m[1],+m[2],+m[3]);
+ if(m=s.match(/(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/))return mk(+m[3],+m[2],+m[1]);
+ if(m=s.match(/(\d{1,2})[\s\/.-]*([a-z]{3,})[\s,\/.-]*(\d{2,4})/)){const mo=BLN[m[2].slice(0,3)];if(mo)return mk(+m[3],mo,+m[1])}
+ if(m=s.match(/^(\d{1,2})[\/.-](\d{1,2})$/))return mk(new Date().getFullYear(),+m[2],+m[1]);
  if(/^\d{5}$/.test(s))return new Date(Math.round((+s-25569)*864e5)+new Date().getTimezoneOffset()*6e4).getTime();
  const d=Date.parse(s);return isNaN(d)?NaN:d};
 const today=()=>{const t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')};
@@ -115,68 +143,135 @@ async function api(action,p){
  if(action==='list'){const r=await fetch(cfg.url+'?action=list&token='+encodeURIComponent(cfg.token));return r.json()}
  const r=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,token:cfg.token,...p})});return r.json()}
 function sample(){let s=11;const r=()=>(s=s*16807%2147483647)/2147483647,o=[];
- for(let i=0;i<34;i++){const p=r(),j=p<.45?'Fullfilment':p<.75?'Logistik':'Miss Information',b=1+Math.floor(r()*2);
- o.push({row:i+2,ch:OPT.ch[Math.floor(r()*r()*6)],id:'2609'+(100000+Math.floor(r()*899999))+'XQ',pic:OPT.pic[Math.floor(r()*6)],fak:j==='Logistik'?'Eksternal':'Internal',jen:j,sol:r()<.55?'Tukar':'Pengembalian',tgl:new Date(2026,8,14+Math.floor(r()*30)).getTime(),rb:b,ra:r()<.6?4+Math.floor(r()*2):b+(r()<.5?1:0),ong:9000+Math.floor(r()*12)*1000,pen:45000+Math.floor(r()*20)*5000})}
+ const KT={'Fullfilment':['Salah varian warna','Isi paket kurang','Barang tertukar dengan pesanan lain'],'Logistik':['Paket penyok saat diterima','Paket terlambat sampai'],'Miss Information':['Deskripsi ukuran tidak sesuai','Pembeli salah pilih varian']};
+ for(let i=0;i<40;i++){const p=r(),j=p<.5?'Fullfilment':p<.75?'Logistik':'Miss Information',b=1+Math.floor(r()*2),sp=r(),kt=KT[j];
+ o.push({row:i+2,ch:OPT.ch[Math.floor(r()*r()*6)],id:'2609'+(100000+Math.floor(r()*899999))+'XQ',pic:j==='Fullfilment'&&r()<.45?'Vika':OPT.pic[Math.floor(r()*6)],fak:j==='Logistik'?'Eksternal':'Internal',jen:j,sol:sp<.5?'Tukar':sp<.75?'Kirim Ulang':'Pengembalian',tgl:new Date(2026,8,14+Math.floor(r()*30)).getTime(),rb:b,ra:r()<.6?4+Math.floor(r()*2):b+(r()<.5?1:0),ong:9000+Math.floor(r()*12)*1000,pen:45000+Math.floor(r()*20)*5000,ket:kt[Math.floor(r()*kt.length)]})}
  return o.sort((a,b)=>a.tgl-b.tgl)}
 async function reload(){const st=$('#st');
  if(!cfg.url){rows=sample();st.textContent='Mode demo';st.classList.add('off');refresh();return}
  st.textContent='Memuat…';st.classList.remove('off');
  try{const j=await api('list');if(!j.ok)throw new Error(j.error);
-  const all=j.rows.map(r=>({...r,tgl:ymd(r.tgl),tglRaw:r.tgl})),bad=all.filter(r=>isNaN(r.tgl));
+  const all=j.rows.map(r=>({...r,ket:r.ket||'',tgl:ymd(r.tgl),tglRaw:r.tgl})),bad=all.filter(r=>isNaN(r.tgl));
   rows=all.filter(r=>!isNaN(r.tgl)).sort((a,b)=>a.tgl-b.tgl||a.row-b.row);st.textContent='Terhubung · '+rows.length+' baris';refresh();
   if(!all.length)toast(j.info?`Terbaca dari spreadsheet "${j.info.ss}". Tab: ${j.info.tabs.join(', ')}. Baris terisi di tab "${j.info.tab}": ${j.info.lastRow}. Kalau ini bukan sheet kamu, Apps Script terpasang di spreadsheet lain.`:'Sheet terbaca kosong. Pasang Code.gs terbaru lalu deploy versi baru.',20000);
   else if(bad.length)toast(bad.length+' baris diabaikan, tanggal tidak terbaca. Contoh isi: "'+bad[0].tglRaw+'" (baris '+bad[0].row+')',12000)}
  catch(e){st.textContent='Gagal terhubung';st.classList.add('off');toast('Gagal memuat: '+e.message)}}
-function refresh(){render();intro();recent()}
+function refresh(){fillSel();render();intro();recent()}
 
-/* ---------- Dashboard ---------- */
+/* ---------- Filter ---------- */
+const FS=[['ch','Channel'],['pic','PIC'],['fak','Faktor'],['jen','Jenis'],['sol','Solusi']];
+$('#fsel').innerHTML=FS.map(([k,l])=>`<select id="s_${k}" aria-label="Filter ${l}"></select>`).join('');
+function fillSel(){FS.forEach(([k,l])=>{const vals=[...new Set([...OPT[k],...rows.map(r=>r[k]).filter(Boolean)])];$('#s_'+k).innerHTML=`<option value="">Semua ${l}</option>`+vals.map(v=>`<option${flt[k]===v?' selected':''}>${esc(v)}</option>`).join('')})}
+const pass=r=>Object.keys(flt).every(k=>!flt[k]||r[k]===flt[k]);
+function applyF(o){const same=Object.keys(o).every(k=>flt[k]===o[k]);Object.keys(o).forEach(k=>flt[k]=same?'':o[k]);lim=10;fillSel();render();intro()}
+$('#fsel').onchange=e=>{flt[e.target.id.slice(2)]=e.target.value;lim=10;render();intro()};
+$('#bRst').onclick=()=>{Object.keys(flt).forEach(k=>flt[k]='');q='';$('#qs').value='';lim=10;fillSel();render();intro()};
+
+/* ---------- Data & saran ---------- */
 const cnt=(a,k)=>{const m={};a.forEach(x=>m[x[k]]=(m[x[k]]||0)+1);return Object.entries(m).sort((x,y)=>y[1]-x[1])};
 const avg=(a,k)=>a.length?a.reduce((s,x)=>s+x[k],0)/a.length:0;
-function scope(){const ok=rows.filter(r=>r.tgl<=Date.now()+DAY),mx=ok.length?ok[ok.length-1].tgl:Date.now(),st=mx-(period-1)*DAY;return{cur:rows.filter(r=>r.tgl>=st),prev:rows.filter(r=>r.tgl<st&&r.tgl>=st-period*DAY),st,mx}}
-function render(){const{cur,prev,st,mx}=scope(),n=cur.length,int=cur.filter(r=>r.fak==='Internal').length,rb=avg(cur,'rb'),ra=avg(cur,'ra'),ong=cur.reduce((s,r)=>s+r.ong,0),dl=n-prev.length;
+function scope(){const ok=rows.filter(r=>r.tgl<=Date.now()+DAY),mx=ok.length?ok[ok.length-1].tgl:Date.now(),st=mx-(period-1)*DAY,b=rows.filter(pass);
+ return{cur:b.filter(r=>r.tgl>=st),prev:b.filter(r=>r.tgl<st&&r.tgl>=st-period*DAY),st,mx}}
+const KW=[[/salah|tertukar|beda|bukan/i,'Salah kirim atau varian: terapkan scan barcode SKU sebelum seal dan cek ganda varian (warna/ukuran).'],
+ [/kurang|tidak lengkap|hilang|tidak ada/i,'Isi paket kurang: pakai checklist kelengkapan (aksesori, bonus, jumlah pcs) saat packing.'],
+ [/rusak|pecah|penyok|cacat|lecet/i,'Kondisi barang: periksa fisik sebelum packing dan tambah pelindung (bubble wrap/dus).'],
+ [/warna|ukuran|size|varian/i,'Varian bermasalah: pisahkan rak per varian dan beri label yang besar dan jelas.'],
+ [/telat|lama|terlambat/i,'Keterlambatan: cek jam cut-off pickup dan kapasitas packing harian.']];
+function adv(cur){const n=cur.length,out=[];if(!n)return out;const pc=x=>Math.round(x/n*100)+'%',loss=a=>rp(a.reduce((s,r)=>s+r.ong,0));
+ const full=cur.filter(r=>r.fak==='Internal'&&r.jen==='Fullfilment');
+ if(full.length){const l=[],tp=cnt(full,'pic')[0],tc=cnt(full,'ch')[0],ts=cnt(full,'sol')[0],notes=full.map(r=>r.ket).filter(Boolean);
+  l.push(`${full.length} kasus (${pc(full.length)} dari semua komplain) berasal dari kesalahan packing/gudang sendiri, jadi paling bisa dicegah. Kerugian ongkir ${loss(full)}.`);
+  if(full.length>=3&&tp[1]/full.length>=.4)l.push(`PIC ${tp[0]} terkait ${tp[1]} dari ${full.length} kasus. Lakukan briefing atau QC tambahan, dan cocokkan dengan volume paket PIC itu sebelum menyimpulkan kinerja.`);
+  l.push('Terapkan scan barcode/SKU sebelum paket di-seal, dan cek ganda varian serta jumlah isi paket.');
+  if(tc)l.push(`Channel terbanyak: ${tc[0]} (${tc[1]} kasus). Periksa apakah varian di channel ini mirip dan mudah tertukar.`);
+  if(ts&&/tukar|kirim ulang/i.test(ts[0]))l.push(`Solusi tersering "${ts[0]}" berarti ada biaya kirim dua kali. Pencegahan di tahap packing lebih murah daripada penanganan.`);
+  if(!notes.length)l.push('Isi kolom Keterangan saat input agar saran bisa lebih spesifik (misalnya salah varian atau isi kurang).');
+  else KW.map(([re,t])=>[notes.filter(x=>re.test(x)).length,t]).filter(x=>x[0]).sort((a,b)=>b[0]-a[0]).slice(0,3).forEach(x=>l.push(`${x[0]} catatan terkait. ${x[1]}`));
+  out.push({t:'Fullfilment Internal: yang perlu ditingkatkan',c:'bad',l})}
+ const lg=cur.filter(r=>r.jen==='Logistik');
+ if(lg.length)out.push({t:'Logistik / Eksternal',c:'mid',l:[`${lg.length} kasus (${pc(lg.length)}). Biasanya di luar kendali packing.`,'Catat ekspedisi di kolom Keterangan lalu bandingkan mana yang paling sering bermasalah, dan perkuat kemasan pelindung untuk barang rawan.']});
+ const mi=cur.filter(r=>r.jen==='Miss Information');
+ if(mi.length)out.push({t:'Miss Information',c:'low',l:[`${mi.length} kasus (${pc(mi.length)}).`,'Perjelas deskripsi, foto ukuran/varian, dan template balasan CS agar ekspektasi pembeli sesuai.']});
+ return out}
+
+/* ---------- Render dashboard ---------- */
+function render(){const{cur,prev,st,mx}=scope(),n=cur.length,int=cur.filter(r=>r.fak==='Internal').length,full=cur.filter(r=>r.fak==='Internal'&&r.jen==='Fullfilment').length,rb=avg(cur,'rb'),ra=avg(cur,'ra'),ong=cur.reduce((s,r)=>s+r.ong,0),dl=n-prev.length;
  $('#kpis').innerHTML=[['Total Komplain',n,prev.length?`<span class="${dl>0?'dn':'up'}">${dl>0?'▲':'▼'} ${Math.abs(dl)} vs periode lalu</span>`:'<span style="color:var(--mu)">periode terpilih</span>'],
- ['Faktor Internal',n?Math.round(int/n*100)+'%':'0%',`<span style="color:var(--mu)">${int} kasus dari tim sendiri</span>`],
+ ['Faktor Internal',n?Math.round(int/n*100)+'%':'0%',`<span style="color:var(--mu)">${int} internal · ${full} fullfilment</span>`],
  ['Rating Setelah',ra.toFixed(1),`<span class="${ra>=rb?'up':'dn'}">${ra>=rb?'▲':'▼'} ${(ra-rb>=0?'+':'')+(ra-rb).toFixed(1)} dari ${rb.toFixed(1)}</span>`],
  ['Kerugian Ongkir',rp(ong),`<span style="color:var(--mu)">${n?rp(ong/n):'Rp0'} rata-rata/kasus</span>`]].map(k=>`<div class="card kpi"><small>${k[0]}</small><b>${k[1]}</b>${k[2]}</div>`).join('');
- const days=[];for(let t=st;t<=mx;t+=DAY)days.push(t);const dc=days.map(t=>cur.filter(r=>r.tgl>=t&&r.tgl<t+DAY).length),M=Math.max(1,...dc),W=420,H=150,P=8;
- const pts=dc.map((v,i)=>[P+i*(W-2*P)/Math.max(1,dc.length-1),H-P-v/M*(H-2*P-10)]),ln=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '),fd=t=>new Date(t).toLocaleDateString('id-ID',{day:'numeric',month:'short'});
- $('#trend').innerHTML=n?`<svg viewBox="0 0 ${W} ${H+16}" width="100%" role="img" aria-label="Tren komplain harian"><path d="${ln} L${pts.at(-1)[0]} ${H} L${P} ${H}Z" fill="var(--c1)" opacity=".14"/><path d="${ln}" fill="none" stroke="var(--c1)" stroke-width="2"/><text x="${P}" y="${H+13}" fill="var(--mu)" font-size="10">${fd(days[0])}</text><text x="${W-P}" y="${H+13}" text-anchor="end" fill="var(--mu)" font-size="10">${fd(mx)} · puncak ${M}/hari</text></svg>`:'<div class="empty">Belum ada data di periode ini</div>';
+ /* tren bertumpuk */
+ const days=[];for(let t=st;t<=mx;t+=DAY)days.push(t);const di=[],de=[];
+ days.forEach(t=>{const a=cur.filter(r=>r.tgl>=t&&r.tgl<t+DAY),i=a.filter(r=>r.fak==='Internal').length;di.push(i);de.push(a.length-i)});
+ const M=Math.max(1,...di.map((v,i)=>v+de[i])),W=420,P=8,B=140,PH=124,bw=(W-2*P)/days.length;
+ $('#trend').innerHTML=n?`<div class="lg2"><span><i style="background:var(--rd)"></i>Internal</span><span><i style="background:var(--c6)"></i>Eksternal</span><span style="margin-left:auto">puncak ${M}/hari</span></div>
+ <svg viewBox="0 0 ${W} 156" width="100%" role="img" aria-label="Komplain harian per faktor"><line x1="${P}" x2="${W-P}" y1="${B}" y2="${B}" stroke="var(--line)"/>${days.map((t,i)=>{const hi=di[i]/M*PH,he=de[i]/M*PH,x=P+i*bw,xb=(x+bw*.15).toFixed(1),w=(bw*.7).toFixed(1);
+ return`<rect x="${xb}" y="${(B-hi).toFixed(1)}" width="${w}" height="${hi.toFixed(1)}" fill="var(--rd)"/><rect x="${xb}" y="${(B-hi-he).toFixed(1)}" width="${w}" height="${he.toFixed(1)}" fill="var(--c6)"/><rect x="${x.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${B}" fill="transparent" data-tip="${fd(t)}: ${di[i]+de[i]} komplain (${di[i]} internal, ${de[i]} eksternal)"/>`}).join('')}
+ <text x="${P}" y="${B+14}" fill="var(--mu)" font-size="10">${fd(days[0])}</text><text x="${W-P}" y="${B+14}" text-anchor="end" fill="var(--mu)" font-size="10">${fd(mx)}</text></svg>`:'<div class="empty">Belum ada data di periode ini</div>';
+ /* donut channel */
  const ch=cnt(cur,'ch'),C=2*Math.PI*40;let off=0;
- $('#donut').innerHTML=n?`<svg viewBox="0 0 100 100" width="140" height="140" style="flex:none"><g transform="rotate(-90 50 50)" fill="none" stroke-width="14">${ch.map((c,i)=>{const l=c[1]/n*C,s=`<circle cx="50" cy="50" r="40" stroke="${cv(i)}" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-off}"/>`;off+=l;return s}).join('')}</g><text x="50" y="52" text-anchor="middle" fill="var(--tx)" font-size="16" font-weight="800">${n}</text><text x="50" y="63" text-anchor="middle" fill="var(--mu)" font-size="6">komplain</text></svg><div class="leg">${ch.map((c,i)=>`<div><i style="background:${cv(i)}"></i>${esc(c[0])}<em>${Math.round(c[1]/n*100)}%</em></div>`).join('')}</div>`:'<div class="empty">Belum ada data</div>';
- const bars=(id,k)=>{const a=cnt(cur,k),m=a[0]?a[0][1]:1;$(id).innerHTML=a.map((c,i)=>`<div class="bar"><p>${esc(c[0])}<span>${c[1]}</span></p><div><i style="width:${c[1]/m*100}%;background:${cv(i)}"></i></div></div>`).join('')||'<div class="empty">–</div>'};
- bars('#bJenis','jen');bars('#bPic','pic');bars('#bSol','sol');
- $('#tb').innerHTML=cur.filter(r=>fil==='Semua'||r.fak===fil).slice(-8).reverse().map(r=>{const d=r.ra-r.rb;return`<tr><td>${fd(r.tgl)}</td><td>${esc(r.id)}</td><td>${esc(r.ch)}</td><td>${esc(r.jen)}</td><td><span class="tag ${r.fak==='Internal'?'t-int':'t-ext'}">${esc(r.fak)}</span></td><td>${esc(r.pic)}</td><td>${esc(r.sol)}</td><td>${r.rb} → <b class="${d>=0?'up':'dn'}">${r.ra}</b></td><td>${rp(r.ong)}</td></tr>`}).join('')||'<tr><td colspan="9" class="empty">Tidak ada data</td></tr>'}
+ $('#donut').innerHTML=n?`<svg viewBox="0 0 100 100" width="140" height="140" style="flex:none"><g transform="rotate(-90 50 50)" fill="none" stroke-width="14">${ch.map((c,i)=>{const l=c[1]/n*C,s=`<circle class="clk" cx="50" cy="50" r="40" stroke="${cv(i)}" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-off}" opacity="${flt.ch&&flt.ch!==c[0]?.3:1}" ${fa({ch:c[0]})} data-tip="${esc(c[0])}: ${c[1]} kasus (${Math.round(c[1]/n*100)}%)"/>`;off+=l;return s}).join('')}</g><text x="50" y="52" text-anchor="middle" fill="var(--tx)" font-size="16" font-weight="800">${n}</text><text x="50" y="63" text-anchor="middle" fill="var(--mu)" font-size="6">komplain</text></svg>
+ <div class="leg">${ch.map((c,i)=>`<div class="clk${flt.ch===c[0]?' act':''}" ${fa({ch:c[0]})}><i style="background:${cv(i)}"></i>${esc(c[0])}<em>${Math.round(c[1]/n*100)}%</em></div>`).join('')}</div>`:'<div class="empty">Belum ada data</div>';
+ /* peta kesalahan */
+ const hv=[...new Set([...OPT[hm],...cur.map(r=>r[hm])])].filter(Boolean),jv=[...new Set([...OPT.jen,...cur.map(r=>r.jen)])].filter(Boolean),hc={};
+ jv.forEach(j=>hv.forEach(h=>hc[j+'|'+h]=cur.filter(r=>r.jen===j&&r[hm]===h).length));const HM=Math.max(1,...Object.values(hc));
+ $('#heat').innerHTML=n?`<div class="tw"><table class="hm"><thead><tr><th></th>${hv.map(h=>`<th>${esc(h)}</th>`).join('')}<th>Total</th></tr></thead><tbody>${jv.map(j=>{const tot=cur.filter(r=>r.jen===j).length;
+ return`<tr><th class="rl">${esc(j)}</th>${hv.map(h=>{const c=hc[j+'|'+h],on=flt.jen===j&&flt[hm]===h;
+ return`<td class="${on?'act':''}" style="background:${c?`rgba(248,113,113,${(.14+.76*c/HM).toFixed(2)})`:'transparent'}" ${fa({jen:j,[hm]:h})} data-tip="${esc(j)} · ${esc(h)}: ${c} kasus${tot?' ('+Math.round(c/tot*100)+'% dari '+esc(j)+')':''}">${c||'·'}</td>`}).join('')}<td style="cursor:default">${tot}</td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">Belum ada data</div>';
+ /* peringkat kesalahan */
+ const m={};cur.forEach(r=>{const k=r.jen+'|'+r.fak+'|'+r.pic;m[k]=(m[k]||0)+1});const tp=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6),tm=tp[0]?tp[0][1]:1;
+ $('#rank').innerHTML=tp.map(([k,c],i)=>{const[j,f,p]=k.split('|');return`<div class="bar clk${flt.jen===j&&flt.fak===f&&flt.pic===p?' act':''}" ${fa({jen:j,fak:f,pic:p})}><p><span style="color:var(--tx)"><b>${i+1}.</b> ${esc(j)} · ${esc(f)} · ${esc(p)}</span><span>${c} kasus (${Math.round(c/n*100)}%)</span></p><div><i style="width:${c/tm*100}%;background:${f==='Internal'?'var(--rd)':'var(--c6)'}"></i></div></div>`}).join('')||'<div class="empty">Belum ada data</div>';
+ /* saran */
+ const A=adv(cur);$('#adv').innerHTML=A.length?A.map(b=>`<div class="ab ${b.c}"><h4>${esc(b.t)}</h4><ul>${b.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join(''):'<div class="empty">Belum ada komplain untuk dianalisis</div>';
+ /* bar */
+ const bars=(id,k)=>{const a=cnt(cur,k),mm=a[0]?a[0][1]:1;$(id).innerHTML=a.map((c,i)=>`<div class="bar clk${flt[k]===c[0]?' act':''}" ${fa({[k]:c[0]})}><p>${esc(c[0])}<span>${c[1]} · ${Math.round(c[1]/n*100)}%</span></p><div><i style="width:${c[1]/mm*100}%;background:${cv(i)}"></i></div></div>`).join('')||'<div class="empty">–</div>'};
+ bars('#bJenis','jen');bars('#bPic','pic');bars('#bSol','sol');tbl()}
+
+function tbl(){const{cur}=scope(),qq=q.trim().toLowerCase(),all=cur.filter(r=>!qq||[r.id,r.ket,r.ch,r.pic,r.jen].join(' ').toLowerCase().includes(qq)).reverse();
+ $('#tb').innerHTML=all.slice(0,lim).map(r=>{const d=r.ra-r.rb;return`<tr class="clk" data-row="${r.row}"><td>${fd(r.tgl)}</td><td>${esc(r.id)}</td><td>${esc(r.ch)}</td><td>${esc(r.jen)}</td><td><span class="tag ${r.fak==='Internal'?'t-int':'t-ext'}">${esc(r.fak)}</span></td><td>${esc(r.pic)}</td><td>${esc(r.sol)}</td><td>${r.rb} → <b class="${d>=0?'up':'dn'}">${r.ra}</b></td><td>${rp(r.ong)}</td><td class="kt">${esc(r.ket)}</td></tr>`}).join('')||'<tr><td colspan="10" class="empty">Tidak ada data</td></tr>';
+ $('#cntTb').textContent=all.length?`Menampilkan ${Math.min(lim,all.length)} dari ${all.length}. Klik baris untuk detail.`:'';$('#bMore').style.display=all.length>lim?'':'none'}
+function detail(row){const r=rows.find(x=>x.row===row);if(!r)return;const d=r.ra-r.rb;
+ $('#dB').innerHTML=[['Tanggal',new Date(r.tgl).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})],['ID Pesanan',r.id],['Channel',r.ch],['PIC Packing',r.pic],['Faktor',r.fak],['Jenis',r.jen],['Solusi',r.sol],['Rating',`${r.rb} → ${r.ra} (${d>=0?'+':''}${d})`],['Biaya pengiriman',rp(r.ong)],['Pendapatan seller',rp(r.pen)],['Keterangan',r.ket||'-'],['Baris di sheet',r.row]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');$('#dlg').showModal()}
 
 /* ---------- Analis ---------- */
-function say(q){const{cur}=scope(),n=cur.length;if(!n)return;let me='',h='';const pct=x=>Math.round(x/n*100)+'%';
- if(q==='cause'){me='Apa penyebab komplain terbesar?';const j=cnt(cur,'jen'),f=cnt(cur,'fak');h=`Penyebab dominan adalah <b>${esc(j[0][0])}</b> (${pct(j[0][1])} dari ${n} komplain).<div class="box"><h4>ANALISIS AKAR MASALAH</h4><ol>${j.map(x=>`<li>${esc(x[0])}: ${x[1]} kasus (${pct(x[1])})</li>`).join('')}</ol></div>Faktor ${esc(f[0][0])} mendominasi (${pct(f[0][1])}).`}
- if(q==='pic'){me='PIC packing mana yang paling banyak komplain?';const p=cnt(cur,'pic');h=`<b>${esc(p[0][0])}</b> terkait ${p[0][1]} komplain (${pct(p[0][1])}).<div class="box"><h4>PERINGKAT PIC</h4><ol>${p.slice(0,4).map(x=>`<li>${esc(x[0])}: ${x[1]} kasus</li>`).join('')}</ol></div>Bandingkan dengan volume paket tiap PIC sebelum menyimpulkan kinerja.`}
- if(q==='chan'){me='Channel mana yang paling bermasalah?';const c=cnt(cur,'ch');h=`<b>${esc(c[0][0])}</b> paling banyak komplain: ${c[0][1]} kasus (${pct(c[0][1])}).<div class="box"><h4>KERUGIAN ONGKIR PER CHANNEL</h4><ol>${c.slice(0,4).map(x=>`<li>${esc(x[0])}: ${rp(cur.filter(r=>r.ch===x[0]).reduce((s,r)=>s+r.ong,0))}</li>`).join('')}</ol></div>`}
- if(q==='rate'){me='Bagaimana dampak penanganan ke rating?';const up=cur.filter(r=>r.ra>r.rb).length,s=cnt(cur,'sol');h=`Rating naik dari <b>${avg(cur,'rb').toFixed(1)}</b> ke <b>${avg(cur,'ra').toFixed(1)}</b>. ${up} dari ${n} pesanan (${pct(up)}) membaik setelah ditangani.<div class="box"><h4>KENAIKAN PER SOLUSI</h4><ol>${s.map(x=>{const a=cur.filter(r=>r.sol===x[0]);return`<li>${esc(x[0])}: ${(avg(a,'ra')-avg(a,'rb')).toFixed(1)} poin (${x[1]} kasus)</li>`}).join('')}</ol></div>`}
+function say(qk){const{cur}=scope(),n=cur.length;if(!n)return;let me='',h='';const pct=x=>Math.round(x/n*100)+'%',blk=b=>`<div class="box"><h4>${esc(b.t.toUpperCase())}</h4><ol>${b.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`;
+ if(qk==='fix'){me='Apa yang harus ditingkatkan?';h='Saran berdasarkan data yang sedang tampil:'+adv(cur).map(blk).join('')}
+ if(qk==='cause'){me='Apa penyebab komplain terbesar?';const j=cnt(cur,'jen'),f=cnt(cur,'fak');h=`Penyebab dominan adalah <b>${esc(j[0][0])}</b> (${pct(j[0][1])} dari ${n} komplain).<div class="box"><h4>ANALISIS AKAR MASALAH</h4><ol>${j.map(x=>`<li>${esc(x[0])}: ${x[1]} kasus (${pct(x[1])})</li>`).join('')}</ol></div>Faktor ${esc(f[0][0])} mendominasi (${pct(f[0][1])}).`;
+  const fb=adv(cur).find(b=>b.c==='bad');if(fb&&j[0][0]==='Fullfilment')h+=blk({t:'Saran singkat: fullfilment internal',l:fb.l.slice(1,4)})}
+ if(qk==='pic'){me='PIC packing mana yang paling banyak komplain?';const p=cnt(cur,'pic');h=`<b>${esc(p[0][0])}</b> terkait ${p[0][1]} komplain (${pct(p[0][1])}).<div class="box"><h4>PERINGKAT PIC</h4><ol>${p.slice(0,4).map(x=>`<li>${esc(x[0])}: ${x[1]} kasus</li>`).join('')}</ol></div>Bandingkan dengan volume paket tiap PIC sebelum menyimpulkan kinerja.`}
+ if(qk==='chan'){me='Channel mana yang paling bermasalah?';const c=cnt(cur,'ch');h=`<b>${esc(c[0][0])}</b> paling banyak komplain: ${c[0][1]} kasus (${pct(c[0][1])}).<div class="box"><h4>KERUGIAN ONGKIR PER CHANNEL</h4><ol>${c.slice(0,4).map(x=>`<li>${esc(x[0])}: ${rp(cur.filter(r=>r.ch===x[0]).reduce((s,r)=>s+r.ong,0))}</li>`).join('')}</ol></div>`}
+ if(qk==='rate'){me='Bagaimana dampak penanganan ke rating?';const up=cur.filter(r=>r.ra>r.rb).length,s=cnt(cur,'sol');h=`Rating naik dari <b>${avg(cur,'rb').toFixed(1)}</b> ke <b>${avg(cur,'ra').toFixed(1)}</b>. ${up} dari ${n} pesanan (${pct(up)}) membaik setelah ditangani.<div class="box"><h4>KENAIKAN PER SOLUSI</h4><ol>${s.map(x=>{const a=cur.filter(r=>r.sol===x[0]);return`<li>${esc(x[0])}: ${(avg(a,'ra')-avg(a,'rb')).toFixed(1)} poin (${x[1]} kasus)</li>`}).join('')}</ol></div>`}
  $('#chat').insertAdjacentHTML('beforeend',`<div class="who me">Anda</div><div class="msg me">${me}</div><div style="clear:both"></div><div class="who">Analis Komplain</div><div class="msg">${h}</div>`);$('#chat').scrollTop=1e9}
-function intro(){const{cur}=scope(),n=cur.length;if(!n){$('#chat').innerHTML='<div class="msg">Belum ada data. Isi lewat menu <b>Input Data</b>.</div>';return}
- const j=cnt(cur,'jen')[0],int=cur.filter(r=>r.fak==='Internal').length,ong=cur.reduce((s,r)=>s+r.ong,0);
- $('#chat').innerHTML=`<div class="who">Analis Komplain</div><div class="msg">Ringkasan ${period} hari terakhir:<div class="box"><h4>PERHATIAN UTAMA</h4>${n} komplain, ${Math.round(int/n*100)}% faktor internal. Jenis terbanyak: <b>${esc(j[0])}</b> (${j[1]} kasus). Kerugian ongkir ${rp(ong)}.</div>Pilih pertanyaan di bawah untuk rinciannya.</div>`}
+function intro(){const{cur}=scope(),n=cur.length;if(!n){$('#chat').innerHTML='<div class="msg">Belum ada data untuk periode/filter ini. Isi lewat menu <b>Input Data</b> atau ubah filter.</div>';return}
+ const j=cnt(cur,'jen')[0],int=cur.filter(r=>r.fak==='Internal').length,fl=cur.filter(r=>r.fak==='Internal'&&r.jen==='Fullfilment').length,ong=cur.reduce((s,r)=>s+r.ong,0);
+ $('#chat').innerHTML=`<div class="who">Analis Komplain</div><div class="msg">Ringkasan ${period} hari terakhir:<div class="box"><h4>PERHATIAN UTAMA</h4>${n} komplain, ${Math.round(int/n*100)}% faktor internal. Jenis terbanyak: <b>${esc(j[0])}</b> (${j[1]} kasus). Kerugian ongkir ${rp(ong)}.${fl?` Ada <b>${fl}</b> kasus fullfilment internal yang bisa dicegah.`:''}</div>Pilih pertanyaan di bawah untuk rinciannya.</div>`}
 
 /* ---------- Input ---------- */
-const F=[['ch','Channel Komplain','sel'],['id','ID Pesanan','txt'],['pic','PIC Packing','sel'],['jen','Jenis Komplain','sel'],['fak','Faktor Komplain','sel'],['sol','Solusi yang ditawarkan','sel'],['tgl','Tanggal penanganan','date'],['rb','Rating sebelum penanganan','num'],['ra','Rating setelah penanganan','num'],['ong','Biaya pengiriman seller (Rp)','num'],['pen','Pendapatan seller (Rp)','num']];
-$('#frm').innerHTML=F.map(([k,l,t])=>`<div><label for="f_${k}">${l}</label>`+(t==='sel'?`<select id="f_${k}">${OPT[k].map(o=>`<option>${esc(o)}</option>`).join('')}</select>`:`<input id="f_${k}" type="${t==='txt'?'text':t}" ${t==='num'?'min="0" step="any" inputmode="decimal"':''} ${k==='id'?'autocomplete="off"':''}>`)+`</div>`).join('');
+const F=[['ch','Channel Komplain','sel'],['id','ID Pesanan','txt'],['pic','PIC Packing','sel'],['jen','Jenis Komplain','sel'],['fak','Faktor Komplain','sel'],['sol','Solusi yang ditawarkan','sel'],['tgl','Tanggal penanganan','date'],['rb','Rating sebelum penanganan','num'],['ra','Rating setelah penanganan','num'],['ong','Biaya pengiriman seller (Rp)','num'],['pen','Pendapatan seller (Rp)','num'],['ket','Keterangan (opsional)','area']];
+$('#frm').innerHTML=F.map(([k,l,t])=>`<div${t==='area'?' style="grid-column:1/-1"':''}><label for="f_${k}">${l}</label>`+(t==='sel'?`<select id="f_${k}">${OPT[k].map(o=>`<option>${esc(o)}</option>`).join('')}</select>`:t==='area'?`<textarea id="f_${k}" rows="2" placeholder="Contoh: salah varian warna, isi paket kurang 1 pcs, ekspedisi JNE…"></textarea>`:`<input id="f_${k}" type="${t==='txt'?'text':t}" ${t==='num'?'min="0" step="any" inputmode="decimal"':''} ${k==='id'?'autocomplete="off"':''}>`)+`</div>`).join('');
 $('#f_tgl').value=today();$('#f_jen').onchange=()=>{$('#f_fak').value=$('#f_jen').value==='Logistik'?'Eksternal':'Internal'};$('#f_jen').onchange();
-$('#fnote').textContent='Faktor terisi otomatis dari jenis komplain (Logistik = Eksternal), tetap bisa kamu ubah.';
+$('#fnote').textContent='Faktor terisi otomatis dari jenis komplain (Logistik = Eksternal), tetap bisa kamu ubah. Keterangan membantu saran perbaikan jadi lebih spesifik.';
 $('#bSave').onclick=async()=>{
  if(!cfg.url)return toast('Hubungkan dulu di menu Pengaturan');
  const d={};F.forEach(([k])=>d[k]=$('#f_'+k).value.trim());
  if(!d.id)return toast('ID Pesanan wajib diisi');if(!d.tgl)return toast('Tanggal wajib diisi');
  if(rows.some(r=>r.id===d.id)&&!confirm('ID Pesanan '+d.id+' sudah ada di sheet. Tetap simpan?'))return;
  const b=$('#bSave');b.disabled=true;b.textContent='Menyimpan…';
- try{const j=await api('add',{data:d});if(!j.ok)throw new Error(j.error);toast('Tersimpan di baris '+j.row);['id','rb','ra','ong','pen'].forEach(k=>$('#f_'+k).value='');$('#f_id').focus();await reload()}
+ try{const j=await api('add',{data:d});if(!j.ok)throw new Error(j.error);toast('Tersimpan di baris '+j.row);['id','rb','ra','ong','pen','ket'].forEach(k=>$('#f_'+k).value='');$('#f_id').focus();await reload()}
  catch(e){toast('Gagal menyimpan: '+e.message)}finally{b.disabled=false;b.textContent='Simpan ke Sheet'}};
-function recent(){$('#tbi').innerHTML=[...rows].sort((a,b)=>b.row-a.row).slice(0,8).map(r=>`<tr><td>${r.row}</td><td>${new Date(r.tgl).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</td><td>${esc(r.id)}</td><td>${esc(r.ch)}</td><td>${esc(r.jen)}</td><td>${esc(r.pic)}</td><td><button data-del="${r.row}">Hapus</button></td></tr>`).join('')||'<tr><td colspan="7" class="empty">Belum ada data</td></tr>'}
+function recent(){$('#tbi').innerHTML=[...rows].sort((a,b)=>b.row-a.row).slice(0,8).map(r=>`<tr><td>${r.row}</td><td>${fd(r.tgl)}</td><td>${esc(r.id)}</td><td>${esc(r.ch)}</td><td>${esc(r.jen)}</td><td>${esc(r.pic)}</td><td class="kt">${esc(r.ket)}</td><td><button data-del="${r.row}">Hapus</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Belum ada data</td></tr>'}
 $('#tbi').onclick=async e=>{const b=e.target.closest('[data-del]');if(!b)return;if(!cfg.url)return toast('Mode demo: tidak ada yang dihapus');
  if(!confirm('Hapus data di baris '+b.dataset.del+'? Baris di sheet akan dikosongkan.'))return;
  try{const j=await api('delete',{row:+b.dataset.del});if(!j.ok)throw new Error(j.error);toast('Dihapus');await reload()}catch(err){toast('Gagal menghapus: '+err.message)}};
 
-/* ---------- Navigasi & pengaturan ---------- */
+/* ---------- Interaksi ---------- */
+$('main').addEventListener('click',e=>{const c=e.target.closest('[data-f]');if(c){applyF(JSON.parse(c.dataset.f));return}
+ const r=e.target.closest('#tb tr[data-row]');if(r)detail(+r.dataset.row)});
+document.addEventListener('mousemove',e=>{const t=e.target.closest&&e.target.closest('[data-tip]'),tp=$('#tip');if(!t){tp.style.display='none';return}
+ tp.textContent=t.dataset.tip;tp.style.display='block';tp.style.left=Math.max(8,Math.min(e.clientX+12,innerWidth-tp.offsetWidth-8))+'px';tp.style.top=(e.clientY+16)+'px'});
+$('#hmSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;hm=b.dataset.hm;$('#hmL').textContent=hm==='pic'?'PIC':'Channel';[...$('#hmSeg').children].forEach(x=>x.classList.toggle('on',x===b));render()};
+$('#qs').oninput=e=>{q=e.target.value;lim=10;tbl()};$('#bMore').onclick=()=>{lim+=10;tbl()};$('#dX').onclick=()=>$('#dlg').close();
+$('#dlg').addEventListener('click',e=>{if(e.target===$('#dlg'))$('#dlg').close()});
 document.querySelector('aside').onclick=e=>{const a=e.target.closest('a');if(!a)return;const v=a.dataset.v;
  document.querySelectorAll('aside a').forEach(x=>x.classList.toggle('on',x===a));document.querySelectorAll('.v').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
  $('#app').classList.toggle('np',v!=='dash');$('#ttl').textContent={dash:'Dashboard Customer Experience',input:'Input Data Komplain',set:'Pengaturan'}[v]};
@@ -184,7 +279,6 @@ $('#cUrl').value=cfg.url;$('#cTok').value=cfg.token;
 $('#bCfg').onclick=()=>{cfg={url:$('#cUrl').value.trim(),token:$('#cTok').value.trim()};try{localStorage.setItem(LS,JSON.stringify(cfg))}catch(e){}toast('Tersimpan, menghubungkan…');reload()};
 $('#bRef').onclick=reload;
 $('#per').onclick=e=>{const b=e.target.closest('button');if(!b)return;period=+b.dataset.p;[...$('#per').children].forEach(x=>x.classList.toggle('on',x===b));render();intro()};
-$('#fil').onclick=e=>{const b=e.target.closest('button');if(!b)return;fil=b.textContent;[...$('#fil').children].forEach(x=>x.classList.toggle('on',x===b));render()};
 $('#chips').onclick=e=>{const b=e.target.closest('button');if(b)say(b.dataset.q)};
 reload();
 </script></body></html>
