@@ -172,27 +172,48 @@ const cnt=(a,k)=>{const m={};a.forEach(x=>m[x[k]]=(m[x[k]]||0)+1);return Object.
 const avg=(a,k)=>a.length?a.reduce((s,x)=>s+x[k],0)/a.length:0;
 function scope(){const ok=rows.filter(r=>r.tgl<=Date.now()+DAY),mx=ok.length?ok[ok.length-1].tgl:Date.now(),st=mx-(period-1)*DAY,b=rows.filter(pass);
  return{cur:b.filter(r=>r.tgl>=st),prev:b.filter(r=>r.tgl<st&&r.tgl>=st-period*DAY),st,mx}}
-const KW=[[/salah|tertukar|beda|bukan/i,'Salah kirim atau varian: terapkan scan barcode SKU sebelum seal dan cek ganda varian (warna/ukuran).'],
- [/kurang|tidak lengkap|hilang|tidak ada/i,'Isi paket kurang: pakai checklist kelengkapan (aksesori, bonus, jumlah pcs) saat packing.'],
- [/rusak|pecah|penyok|cacat|lecet/i,'Kondisi barang: periksa fisik sebelum packing dan tambah pelindung (bubble wrap/dus).'],
- [/warna|ukuran|size|varian/i,'Varian bermasalah: pisahkan rak per varian dan beri label yang besar dan jelas.'],
- [/telat|lama|terlambat/i,'Keterlambatan: cek jam cut-off pickup dan kapasitas packing harian.']];
-function adv(cur){const n=cur.length,out=[];if(!n)return out;const pc=x=>Math.round(x/n*100)+'%',loss=a=>rp(a.reduce((s,r)=>s+r.ong,0));
- const full=cur.filter(r=>r.fak==='Internal'&&r.jen==='Fullfilment');
- if(full.length){const l=[],tp=cnt(full,'pic')[0],tc=cnt(full,'ch')[0],ts=cnt(full,'sol')[0],notes=full.map(r=>r.ket).filter(Boolean);
-  l.push(`${full.length} kasus (${pc(full.length)} dari semua komplain) berasal dari kesalahan packing/gudang sendiri, jadi paling bisa dicegah. Kerugian ongkir ${loss(full)}.`);
-  if(full.length>=3&&tp[1]/full.length>=.4)l.push(`PIC ${tp[0]} terkait ${tp[1]} dari ${full.length} kasus. Lakukan briefing atau QC tambahan, dan cocokkan dengan volume paket PIC itu sebelum menyimpulkan kinerja.`);
-  l.push('Terapkan scan barcode/SKU sebelum paket di-seal, dan cek ganda varian serta jumlah isi paket.');
-  if(tc)l.push(`Channel terbanyak: ${tc[0]} (${tc[1]} kasus). Periksa apakah varian di channel ini mirip dan mudah tertukar.`);
-  if(ts&&/tukar|kirim ulang/i.test(ts[0]))l.push(`Solusi tersering "${ts[0]}" berarti ada biaya kirim dua kali. Pencegahan di tahap packing lebih murah daripada penanganan.`);
-  if(!notes.length)l.push('Isi kolom Keterangan saat input agar saran bisa lebih spesifik (misalnya salah varian atau isi kurang).');
-  else KW.map(([re,t])=>[notes.filter(x=>re.test(x)).length,t]).filter(x=>x[0]).sort((a,b)=>b[0]-a[0]).slice(0,3).forEach(x=>l.push(`${x[0]} catatan terkait. ${x[1]}`));
-  out.push({t:'Fullfilment Internal: yang perlu ditingkatkan',c:'bad',l})}
- const lg=cur.filter(r=>r.jen==='Logistik');
- if(lg.length)out.push({t:'Logistik / Eksternal',c:'mid',l:[`${lg.length} kasus (${pc(lg.length)}). Biasanya di luar kendali packing.`,'Catat ekspedisi di kolom Keterangan lalu bandingkan mana yang paling sering bermasalah, dan perkuat kemasan pelindung untuk barang rawan.']});
- const mi=cur.filter(r=>r.jen==='Miss Information');
- if(mi.length)out.push({t:'Miss Information',c:'low',l:[`${mi.length} kasus (${pc(mi.length)}).`,'Perjelas deskripsi, foto ukuran/varian, dan template balasan CS agar ekspektasi pembeli sesuai.']});
+/* Aturan saran per kasus: [jenis, faktor ('*' = semua), regex Keterangan (null = sisanya), judul, tingkat, aksi] */
+const RULES=[
+ ['Fullfilment','Internal',/salah|tertukar|beda|bukan|varian|warna|ukuran|size/i,'Salah varian / barang tertukar','bad',['Scan barcode/SKU sebelum paket di-seal','Cek ganda varian (warna/ukuran) terhadap pesanan','Pisahkan rak per varian dan beri label yang besar']],
+ ['Fullfilment','Internal',/kurang|tidak lengkap|hilang|tidak ada|bonus|aksesori/i,'Isi paket kurang','bad',['Pakai checklist kelengkapan (jumlah pcs, aksesori, bonus)','Foto atau timbang paket sebelum seal sebagai bukti','Siapkan bonus/aksesori dalam satu kit agar tidak terlewat']],
+ ['Fullfilment','Internal',/rusak|pecah|penyok|cacat|lecet|bocor/i,'Barang rusak dari gudang','bad',['Periksa fisik barang sebelum packing (QC)','Tambah pelindung: bubble wrap atau dus ganda','Pisahkan stok cacat dari stok siap kirim']],
+ ['Fullfilment','Internal',null,'Penyebab belum jelas','mid',['Isi kolom Keterangan agar penyebab bisa dikelompokkan','Tinjau SOP packing dan briefing harian ke PIC']],
+ ['Logistik','*',/rusak|pecah|penyok|lecet|bocor/i,'Paket rusak di perjalanan','mid',['Perkuat kemasan pelindung untuk barang rawan','Pertimbangkan asuransi untuk barang bernilai tinggi','Simpan foto packing sebagai bukti klaim ke ekspedisi']],
+ ['Logistik','*',/telat|lama|terlambat|delay/i,'Pengiriman terlambat','mid',['Cek jam cut-off pickup ekspedisi','Bandingkan ekspedisi/layanan dan catat di Keterangan','Beri estimasi tiba yang jelas ke pembeli']],
+ ['Logistik','*',/hilang|tidak sampai|salah alamat/i,'Paket hilang / tidak sampai','mid',['Ajukan klaim ke ekspedisi dengan resi dan bukti serah terima','Verifikasi alamat sebelum kirim']],
+ ['Logistik','*',null,'Penyebab belum jelas','low',['Catat ekspedisi di Keterangan lalu bandingkan mana yang paling sering bermasalah']],
+ ['Miss Information','*',/ukuran|size|warna|deskripsi|foto|beda/i,'Deskripsi/foto tidak sesuai','low',['Perjelas deskripsi, tabel ukuran, dan foto varian di listing','Tambahkan catatan bahwa warna di layar bisa sedikit berbeda']],
+ ['Miss Information','*',/pilih|salah beli|salah order|varian/i,'Pembeli salah pilih varian','low',['Chat konfirmasi varian sebelum paket dikirim','Beri petunjuk pemilihan varian yang jelas di listing']],
+ ['Miss Information','*',null,'Penyebab belum jelas','low',['Perbaiki template balasan CS agar ekspektasi pembeli sesuai']]
+].map(([j,f,re,t,c,a])=>({j,f,re,t,c,a}));
+const FB={j:'Lainnya',t:'Kasus lain',c:'low',a:['Isi Keterangan dan pastikan Jenis/Faktor sesuai pilihan di sheet']};
+const ruleFor=r=>RULES.findIndex(x=>x.j===r.jen&&(x.f==='*'||x.f===r.fak)&&(!x.re||x.re.test(r.ket||'')));
+const getRule=i=>i<0?FB:RULES[i];
+/* tips yang bergantung pada solusi dan rating, dipakai di level kelompok maupun kasus tunggal */
+function tips(a){const l=[],ts=cnt(a,'sol')[0];
+ if(ts&&/tukar|kirim ulang/i.test(ts[0]))l.push(`Solusi tersering "${ts[0]}" berarti biaya kirim dua kali, jadi pencegahan lebih murah daripada penanganan.`);
+ if(ts&&/pengembalian/i.test(ts[0]))l.push('Banyak berujung pengembalian, yang langsung mengurangi pendapatan. Prioritaskan pencegahan dan tawarkan tukar/kirim ulang lebih dulu bila memungkinkan.');
+ const u=a.filter(r=>r.ra<r.rb||r.ra<4).length;if(u&&u/a.length>=.5)l.push(`Rating belum pulih pada ${u} kasus. Follow-up pembeli setelah solusi dan minta pembaruan ulasan.`);
+ return l}
+function adv(cur,prev){const n=cur.length,out=[];if(!n)return out;const pc=x=>Math.round(x/n*100)+'%',g={};
+ cur.forEach(r=>{const i=ruleFor(r);(g[i]=g[i]||[]).push(r)});
+ const act=FS.filter(([k])=>flt[k]).map(([k,l])=>`${l} = ${flt[k]}`);
+ Object.keys(g).forEach(k=>{const i=+k,a=g[k],ru=getRule(i),l=[];
+  l.push(`${a.length} kasus (${pc(a.length)} dari komplain${act.length?' pada filter ini':''}). Kerugian ongkir ${rp(a.reduce((s,r)=>s+r.ong,0))}.`);
+  if(prev&&prev.length){const pv=prev.filter(r=>ruleFor(r)===i).length;l.push(!pv?'Baru muncul dibanding periode lalu.':a.length>pv?`Naik ${a.length-pv} dari periode lalu (${pv} kasus).`:a.length<pv?`Turun ${pv-a.length} dari periode lalu (${pv} kasus).`:`Sama dengan periode lalu (${pv} kasus).`)}
+  if(a.length>=3){const tp=cnt(a,'pic')[0],tc=cnt(a,'ch')[0];
+   if(ru.j==='Fullfilment'&&tp[1]/a.length>=.4)l.push(`PIC ${tp[0]} terkait ${tp[1]} dari ${a.length} kasus. Lakukan briefing atau QC tambahan, dan cocokkan dengan volume paketnya sebelum menyimpulkan kinerja.`);
+   if(tc[1]/a.length>=.5)l.push(`${tc[1]} kasus ada di channel ${tc[0]}. Periksa produk atau listing yang sering bermasalah di channel ini.`)}
+  tips(a).forEach(x=>l.push(x));ru.a.forEach(x=>l.push(x));
+  out.push({t:`${ru.j}${ru.j==='Fullfilment'?' Internal':''}: ${ru.t}`,c:ru.c,l,n:a.length})});
+ const so={bad:0,mid:1,low:2};out.sort((x,y)=>so[x.c]-so[y.c]||y.n-x.n);
+ if(act.length)out.unshift({t:'Konteks filter',c:'low',l:[`Saran dihitung hanya untuk: ${act.join(', ')}.`],n:0});
  return out}
+function caseAdv(r){const ru=getRule(ruleFor(r)),l=[`${ru.j}: ${ru.t}`,...ru.a.slice(0,3)];
+ if(/tukar|kirim ulang/i.test(r.sol))l.push('Solusi ini menambah biaya kirim dua kali.');
+ if(/pengembalian/i.test(r.sol))l.push('Berujung pengembalian dan mengurangi pendapatan.');
+ if(r.ra<r.rb||r.ra<4)l.push('Rating belum pulih, follow-up pembeli.');
+ return l}
 
 /* ---------- Render dashboard ---------- */
 function render(){const{cur,prev,st,mx}=scope(),n=cur.length,int=cur.filter(r=>r.fak==='Internal').length,full=cur.filter(r=>r.fak==='Internal'&&r.jen==='Fullfilment').length,rb=avg(cur,'rb'),ra=avg(cur,'ra'),ong=cur.reduce((s,r)=>s+r.ong,0),dl=n-prev.length;
@@ -222,7 +243,7 @@ function render(){const{cur,prev,st,mx}=scope(),n=cur.length,int=cur.filter(r=>r
  const m={};cur.forEach(r=>{const k=r.jen+'|'+r.fak+'|'+r.pic;m[k]=(m[k]||0)+1});const tp=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6),tm=tp[0]?tp[0][1]:1;
  $('#rank').innerHTML=tp.map(([k,c],i)=>{const[j,f,p]=k.split('|');return`<div class="bar clk${flt.jen===j&&flt.fak===f&&flt.pic===p?' act':''}" ${fa({jen:j,fak:f,pic:p})}><p><span style="color:var(--tx)"><b>${i+1}.</b> ${esc(j)} · ${esc(f)} · ${esc(p)}</span><span>${c} kasus (${Math.round(c/n*100)}%)</span></p><div><i style="width:${c/tm*100}%;background:${f==='Internal'?'var(--rd)':'var(--c6)'}"></i></div></div>`}).join('')||'<div class="empty">Belum ada data</div>';
  /* saran */
- const A=adv(cur);$('#adv').innerHTML=A.length?A.map(b=>`<div class="ab ${b.c}"><h4>${esc(b.t)}</h4><ul>${b.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join(''):'<div class="empty">Belum ada komplain untuk dianalisis</div>';
+ const A=adv(cur,prev);$('#adv').innerHTML=A.length?A.map(b=>`<div class="ab ${b.c}"><h4>${esc(b.t)}</h4><ul>${b.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join(''):'<div class="empty">Belum ada komplain untuk dianalisis</div>';
  /* bar */
  const bars=(id,k)=>{const a=cnt(cur,k),mm=a[0]?a[0][1]:1;$(id).innerHTML=a.map((c,i)=>`<div class="bar clk${flt[k]===c[0]?' act':''}" ${fa({[k]:c[0]})}><p>${esc(c[0])}<span>${c[1]} · ${Math.round(c[1]/n*100)}%</span></p><div><i style="width:${c[1]/mm*100}%;background:${cv(i)}"></i></div></div>`).join('')||'<div class="empty">–</div>'};
  bars('#bJenis','jen');bars('#bPic','pic');bars('#bSol','sol');tbl()}
@@ -231,13 +252,13 @@ function tbl(){const{cur}=scope(),qq=q.trim().toLowerCase(),all=cur.filter(r=>!q
  $('#tb').innerHTML=all.slice(0,lim).map(r=>{const d=r.ra-r.rb;return`<tr class="clk" data-row="${r.row}"><td>${fd(r.tgl)}</td><td>${esc(r.id)}</td><td>${esc(r.ch)}</td><td>${esc(r.jen)}</td><td><span class="tag ${r.fak==='Internal'?'t-int':'t-ext'}">${esc(r.fak)}</span></td><td>${esc(r.pic)}</td><td>${esc(r.sol)}</td><td>${r.rb} → <b class="${d>=0?'up':'dn'}">${r.ra}</b></td><td>${rp(r.ong)}</td><td class="kt">${esc(r.ket)}</td></tr>`}).join('')||'<tr><td colspan="10" class="empty">Tidak ada data</td></tr>';
  $('#cntTb').textContent=all.length?`Menampilkan ${Math.min(lim,all.length)} dari ${all.length}. Klik baris untuk detail.`:'';$('#bMore').style.display=all.length>lim?'':'none'}
 function detail(row){const r=rows.find(x=>x.row===row);if(!r)return;const d=r.ra-r.rb;
- $('#dB').innerHTML=[['Tanggal',new Date(r.tgl).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})],['ID Pesanan',r.id],['Channel',r.ch],['PIC Packing',r.pic],['Faktor',r.fak],['Jenis',r.jen],['Solusi',r.sol],['Rating',`${r.rb} → ${r.ra} (${d>=0?'+':''}${d})`],['Biaya pengiriman',rp(r.ong)],['Pendapatan seller',rp(r.pen)],['Keterangan',r.ket||'-'],['Baris di sheet',r.row]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');$('#dlg').showModal()}
+ $('#dB').innerHTML=[['Tanggal',new Date(r.tgl).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})],['ID Pesanan',r.id],['Channel',r.ch],['PIC Packing',r.pic],['Faktor',r.fak],['Jenis',r.jen],['Solusi',r.sol],['Rating',`${r.rb} → ${r.ra} (${d>=0?'+':''}${d})`],['Biaya pengiriman',rp(r.ong)],['Pendapatan seller',rp(r.pen)],['Keterangan',r.ket||'-'],['Baris di sheet',r.row]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')+`<dt>Saran kasus ini</dt><dd><ul style="margin:0;padding-left:16px">${caseAdv(r).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></dd>`;$('#dlg').showModal()}
 
 /* ---------- Analis ---------- */
-function say(qk){const{cur}=scope(),n=cur.length;if(!n)return;let me='',h='';const pct=x=>Math.round(x/n*100)+'%',blk=b=>`<div class="box"><h4>${esc(b.t.toUpperCase())}</h4><ol>${b.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`;
- if(qk==='fix'){me='Apa yang harus ditingkatkan?';h='Saran berdasarkan data yang sedang tampil:'+adv(cur).map(blk).join('')}
+function say(qk){const{cur,prev}=scope(),n=cur.length;if(!n)return;let me='',h='';const pct=x=>Math.round(x/n*100)+'%',blk=b=>`<div class="box"><h4>${esc(b.t.toUpperCase())}</h4><ol>${b.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`;
+ if(qk==='fix'){me='Apa yang harus ditingkatkan?';h='Saran berdasarkan data yang sedang tampil:'+adv(cur,prev).slice(0,4).map(blk).join('')}
  if(qk==='cause'){me='Apa penyebab komplain terbesar?';const j=cnt(cur,'jen'),f=cnt(cur,'fak');h=`Penyebab dominan adalah <b>${esc(j[0][0])}</b> (${pct(j[0][1])} dari ${n} komplain).<div class="box"><h4>ANALISIS AKAR MASALAH</h4><ol>${j.map(x=>`<li>${esc(x[0])}: ${x[1]} kasus (${pct(x[1])})</li>`).join('')}</ol></div>Faktor ${esc(f[0][0])} mendominasi (${pct(f[0][1])}).`;
-  const fb=adv(cur).find(b=>b.c==='bad');if(fb&&j[0][0]==='Fullfilment')h+=blk({t:'Saran singkat: fullfilment internal',l:fb.l.slice(1,4)})}
+  const fb=adv(cur,prev).find(b=>b.c==='bad');if(fb&&j[0][0]==='Fullfilment')h+=blk({t:'Saran singkat: '+fb.t,l:fb.l.slice(-3)})}
  if(qk==='pic'){me='PIC packing mana yang paling banyak komplain?';const p=cnt(cur,'pic');h=`<b>${esc(p[0][0])}</b> terkait ${p[0][1]} komplain (${pct(p[0][1])}).<div class="box"><h4>PERINGKAT PIC</h4><ol>${p.slice(0,4).map(x=>`<li>${esc(x[0])}: ${x[1]} kasus</li>`).join('')}</ol></div>Bandingkan dengan volume paket tiap PIC sebelum menyimpulkan kinerja.`}
  if(qk==='chan'){me='Channel mana yang paling bermasalah?';const c=cnt(cur,'ch');h=`<b>${esc(c[0][0])}</b> paling banyak komplain: ${c[0][1]} kasus (${pct(c[0][1])}).<div class="box"><h4>KERUGIAN ONGKIR PER CHANNEL</h4><ol>${c.slice(0,4).map(x=>`<li>${esc(x[0])}: ${rp(cur.filter(r=>r.ch===x[0]).reduce((s,r)=>s+r.ong,0))}</li>`).join('')}</ol></div>`}
  if(qk==='rate'){me='Bagaimana dampak penanganan ke rating?';const up=cur.filter(r=>r.ra>r.rb).length,s=cnt(cur,'sol');h=`Rating naik dari <b>${avg(cur,'rb').toFixed(1)}</b> ke <b>${avg(cur,'ra').toFixed(1)}</b>. ${up} dari ${n} pesanan (${pct(up)}) membaik setelah ditangani.<div class="box"><h4>KENAIKAN PER SOLUSI</h4><ol>${s.map(x=>{const a=cur.filter(r=>r.sol===x[0]);return`<li>${esc(x[0])}: ${(avg(a,'ra')-avg(a,'rb')).toFixed(1)} poin (${x[1]} kasus)</li>`}).join('')}</ol></div>`}
