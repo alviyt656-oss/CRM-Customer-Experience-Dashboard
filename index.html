@@ -136,7 +136,11 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 <label>Username<input id="lUser" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
 <label>PIN<input id="lPin" type="password" autocomplete="current-password" inputmode="numeric"></label>
 <p id="lErr" role="alert"></p><button class="pri" id="lBtn">Masuk</button>
-<p class="note">Cukup masuk sekali di perangkat ini. Kamu tetap masuk, termasuk setelah halaman di-refresh, sampai menekan Keluar.</p></div></div>
+<p class="note">Cukup masuk sekali di perangkat ini. Kamu tetap masuk, termasuk setelah halaman di-refresh, sampai menekan Keluar.</p>
+<details style="font-size:12px;color:var(--mu)"><summary style="cursor:pointer">Pengaturan koneksi server</summary><div style="display:grid;gap:8px;margin-top:8px">
+<label>URL Web App<input id="lUrl" placeholder="https://script.google.com/macros/s/…/exec"></label>
+<label>Token<input id="lTok" type="password"></label>
+<div style="display:flex;gap:8px"><button id="lSave">Simpan</button><button id="lTest">Tes koneksi</button></div><p class="note" id="lInfo"></p></div></details></div></div>
 <div id="toast"></div><div id="tip"></div>
 
 <script>
@@ -461,8 +465,15 @@ async function doLogin(){const u=$('#lUser').value.trim(),pn=$('#lPin').value.tr
  try{const j=await(await post({action:'login',user:u,pin:pn})).json();if(!j.ok)throw new Error(j.error);
   ses={s:j.session,u:j.user};try{localStorage.setItem(SK,JSON.stringify(ses))}catch(e){}
   $('#lPin').value='';afterLogin();reload()}
- catch(e){er.textContent=e.message==='Failed to fetch'?'Tidak bisa terhubung ke server':e.message}
+ catch(e){er.textContent=e.message==='Failed to fetch'?'Tidak bisa terhubung ke server':/^Aksi tidak dikenal/.test(e.message)?'Server belum memakai kode terbaru (aksi login belum dikenali). Buka "Pengaturan koneksi server" di bawah, lalu klik Tes koneksi.':e.message}
  finally{b.disabled=false;b.textContent='Masuk'}}
+$('#lUrl').value=cfg.url;$('#lTok').value=cfg.token;
+const lcfg=()=>{cfg={url:$('#lUrl').value.trim(),token:$('#lTok').value.trim()};try{localStorage.setItem(LS,JSON.stringify(cfg))}catch(e){}$('#cUrl').value=cfg.url;$('#cTok').value=cfg.token};
+$('#lSave').onclick=()=>{lcfg();$('#lInfo').textContent='Tersimpan. Klik Tes koneksi atau langsung Masuk.'};
+$('#lTest').onclick=async()=>{lcfg();const i=$('#lInfo');i.textContent='Menguji…';
+ try{const j=await(await fetch(cfg.url+'?token='+encodeURIComponent(cfg.token))).json();
+  i.textContent=!j.ok?'Server menjawab: '+j.error:j.version?'Terhubung. Server versi '+j.version+' (sudah mendukung login dan tambah user).':'Server masih memakai kode LAMA (belum ada login). Deploy ulang Code.gs terbaru, atau pakai URL deployment yang benar.'}
+ catch(e){i.textContent='Tidak bisa terhubung. Cek URL Web App dan akses deployment ("Anyone").'}};
 $('#lBtn').onclick=doLogin;
 ['#lUser','#lPin'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()}));
 $('#aOut').onclick=()=>{if(confirm('Keluar dari dashboard di perangkat ini?'))logout(false)};
