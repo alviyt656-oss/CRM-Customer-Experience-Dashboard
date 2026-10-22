@@ -56,6 +56,11 @@ td.kt{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 #tip{position:fixed;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;z-index:20;display:none;max-width:260px}
 dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:12px;width:min(520px,92vw);padding:18px}dialog::backdrop{background:rgba(0,0,0,.6)}
 .dl{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:13px}.dl dt{color:var(--mu)}.dl dd{margin:0;word-break:break-word}
+#login{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}#login.on{display:flex}
+.lbox{width:min(380px,100%);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;display:grid;gap:12px}
+.lbox h2{margin:0;font-size:18px}.lbox label{font-size:12px;color:var(--mu);font-weight:600;display:grid;gap:4px}
+.lbox input{width:100%;background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:11px 12px;font-size:15px}
+#lErr{color:var(--rd);font-size:13px;min-height:18px;margin:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:1100px){.app,.app.np{display:block;height:auto}aside{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-right:0;border-bottom:1px solid var(--line)}aside .logo{display:none}aside a{white-space:nowrap;margin:0}main{overflow:visible}.panel{border-left:0;border-top:1px solid var(--line)}.chat{max-height:420px}}
 @media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.row,.row3,.form{grid-template-columns:1fr}.donut{flex-direction:column;align-items:flex-start}.fbar .seg{margin-left:0}}
@@ -64,7 +69,7 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
  :root,:root:not([data-theme="dark"]){--bg:#fff;--side:#fff;--card:#fff;--card2:#f6f8fb;--line:#d8dee8;--tx:#182033;--mu:#667389;--ac:#4d7c0f;--acd:rgba(77,124,15,.12);--c1:#65a30d;--c2:#6366f1;--c3:#ea580c;--c4:#db2777;--c5:#0284c7;--c6:#ca8a04;--rd:#dc2626;--inp:#fff}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
  html,body{height:auto}.app,.app.np{display:block;height:auto}
- aside,.panel,header button,.fbar,#v-input,#v-set,#bMore,#qs,.chips,#toast,#tip{display:none!important}
+ #login,aside,.panel,header button,.fbar,#v-input,#v-set,#bMore,#qs,.chips,#toast,#tip{display:none!important}
  main{overflow:visible;padding:0}header{position:static}
  #v-dash{display:block!important}
  .card{break-inside:avoid}.kpis{grid-template-columns:repeat(4,1fr)}
@@ -73,7 +78,7 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 </style></head><body>
 <div class="app" id="app">
 <aside><div class="logo"><b>CX</b>Komplain CX</div>
-<a data-v="dash" class="on">Dashboard</a><a data-v="input">Input Data</a><a data-v="set">Pengaturan</a></aside>
+<a data-v="dash" class="on">Dashboard</a><a data-v="input">Input Data</a><a data-v="usr">Tambah User</a><a data-v="set">Pengaturan</a><a id="aOut" style="margin-top:14px;color:var(--rd)">Keluar</a></aside>
 
 <main>
 <header><h1 id="ttl">Dashboard Customer Experience</h1><span class="live" id="st">Memuat…</span><button id="bRef">Muat Ulang</button>
@@ -108,6 +113,13 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 <section class="card" style="margin-top:14px"><div class="hd"><h3>Data Terakhir Masuk</h3></div><div class="tw"><table><thead><tr><th>Baris</th><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>PIC</th><th>Keterangan</th><th></th></tr></thead><tbody id="tbi"></tbody></table></div></section>
 </div>
 
+<div class="v" id="v-usr"><section class="card cfg"><h3 style="margin:0">Tambah User Baru</h3>
+<label>Nama user baru<input id="uNm" autocomplete="off" autocapitalize="none" spellcheck="false"></label>
+<label>PIN user baru (4–8 angka)<input id="uPn" type="password" inputmode="numeric" autocomplete="new-password"></label>
+<label>Ulangi PIN user baru<input id="uPn2" type="password" inputmode="numeric" autocomplete="new-password"></label>
+<label>Konfirmasi: masukkan PIN kamu (<span id="uMe">-</span>)<input id="uMy" type="password" inputmode="numeric" autocomplete="current-password"></label>
+<button class="pri" id="bUsr">Tambah User</button>
+<p class="note">User baru langsung bisa masuk. Datanya tersimpan di tab "User" pada Google Sheet.</p></section></div>
 <div class="v" id="v-set"><section class="card cfg"><h3 style="margin:0">Koneksi ke Google Sheet</h3>
 <label>URL Web App (Apps Script)<input id="cUrl" placeholder="https://script.google.com/macros/s/…/exec"></label>
 <label>Token<input id="cTok" type="password" placeholder="sama dengan TOKEN di Code.gs"></label>
@@ -120,6 +132,11 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 <div class="chips" id="chips"><button data-q="fix">Saran perbaikan</button><button data-q="cause">Penyebab terbesar</button><button data-q="pic">PIC terbanyak</button><button data-q="chan">Channel bermasalah</button><button data-q="rate">Dampak rating</button></div></div>
 </div>
 <dialog id="dlg"><div class="hd"><h3>Detail Komplain</h3><button id="dX">Tutup</button></div><dl class="dl" id="dB"></dl></dialog>
+<div id="login" class="on"><div class="lbox"><div class="logo" style="margin:0"><b>CX</b>Komplain CX</div><h2>Masuk</h2>
+<label>Username<input id="lUser" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+<label>PIN<input id="lPin" type="password" autocomplete="current-password" inputmode="numeric"></label>
+<p id="lErr" role="alert"></p><button class="pri" id="lBtn">Masuk</button>
+<p class="note">Cukup masuk sekali di perangkat ini. Kamu tetap masuk, termasuk setelah halaman di-refresh, sampai menekan Keluar.</p></div></div>
 <div id="toast"></div><div id="tip"></div>
 
 <script>
@@ -130,13 +147,13 @@ const OPT={
  fak:['Internal','Eksternal'],
  jen:['Fullfilment','Logistik','Miss Information'],
  sol:['Tukar','Pengembalian','Kirim Ulang']};
-const DEFAULT_URL='https://script.google.com/macros/s/AKfycbyBdVNjEc16F7023Ip_UlH3gz4g1p0lu1WB_i9EZUcde0urQuSiU35ngGNQfnSh4bWdcQ/exec',
+const DEFAULT_URL='https://script.google.com/macros/s/AKfycbw40riTeH7KgTkF3ngHuEp1Sgols4iArrCEcowIzPaTVzd-ay4A9VNs8XmHrk_V5je7tQ/exec',
 DEFAULT_TOKEN='1T-JawA4dPNTrNmdwPBLI90oKRwpm7kL4cKgrTQHPaPw'; // langsung terhubung tanpa menu Pengaturan
 /* ============================================================================== */
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const CLR=['--c1','--c2','--c3','--c4','--c5','--c6'],cv=i=>`var(${CLR[i%6]})`,rp=n=>'Rp'+Math.round(n).toLocaleString('id-ID'),DAY=864e5;
 const fd=t=>new Date(t).toLocaleDateString('id-ID',{day:'numeric',month:'short'}),fa=o=>`data-f="${esc(JSON.stringify(o))}"`;
-const LS='cxk-cfg';let cfg={url:DEFAULT_URL,token:DEFAULT_TOKEN},rows=[],period=30,hm='pic',lim=10,q='',flt={ch:'',pic:'',fak:'',jen:'',sol:''};
+const LS='cxk-cfg';let ses={s:'',u:''},cfg={url:DEFAULT_URL,token:DEFAULT_TOKEN},rows=[],period=30,hm='pic',lim=10,q='',flt={ch:'',pic:'',fak:'',jen:'',sol:''};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){}
 const toast=(m,ms=3500)=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',ms)};
 
@@ -153,9 +170,10 @@ const ymd=s=>{s=String(s??'').trim().toLowerCase();let m;
 const today=()=>{const t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')};
 
 /* ---------- API ---------- */
+const fin=async r=>{const j=await r.json();if(j&&j.auth){logout(true);throw new Error('Sesi tidak valid, silakan masuk lagi')}return j};
 async function api(action,p){
- if(action==='list'){const r=await fetch(cfg.url+'?action=list&token='+encodeURIComponent(cfg.token));return r.json()}
- const r=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,token:cfg.token,...p})});return r.json()}
+ if(action==='list')return fin(await fetch(cfg.url+'?action=list&token='+encodeURIComponent(cfg.token)+'&session='+encodeURIComponent(ses.s)));
+ return fin(await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,token:cfg.token,session:ses.s,...p})}))}
 function sample(){let s=11;const r=()=>(s=s*16807%2147483647)/2147483647,o=[];
  const KT={'Fullfilment':['Salah varian warna','Isi paket kurang','Barang tertukar dengan pesanan lain'],'Logistik':['Paket penyok saat diterima','Paket terlambat sampai'],'Miss Information':['Deskripsi ukuran tidak sesuai','Pembeli salah pilih varian']};
  for(let i=0;i<40;i++){const p=r(),j=p<.5?'Fullfilment':p<.75?'Logistik':'Miss Information',b=1+Math.floor(r()*2),sp=r(),kt=KT[j];
@@ -307,9 +325,9 @@ document.addEventListener('mousemove',e=>{const t=e.target.closest&&e.target.clo
 $('#hmSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;hm=b.dataset.hm;$('#hmL').textContent=hm==='pic'?'PIC':'Channel';[...$('#hmSeg').children].forEach(x=>x.classList.toggle('on',x===b));render()};
 $('#qs').oninput=e=>{q=e.target.value;lim=10;tbl()};$('#bMore').onclick=()=>{lim+=10;tbl()};$('#dX').onclick=()=>$('#dlg').close();
 $('#dlg').addEventListener('click',e=>{if(e.target===$('#dlg'))$('#dlg').close()});
-document.querySelector('aside').onclick=e=>{const a=e.target.closest('a');if(!a)return;const v=a.dataset.v;
+document.querySelector('aside').onclick=e=>{const a=e.target.closest('a[data-v]');if(!a)return;const v=a.dataset.v;
  document.querySelectorAll('aside a').forEach(x=>x.classList.toggle('on',x===a));document.querySelectorAll('.v').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
- $('#app').classList.toggle('np',v!=='dash');$('#ttl').textContent={dash:'Dashboard Customer Experience',input:'Input Data Komplain',set:'Pengaturan'}[v]};
+ $('#app').classList.toggle('np',v!=='dash');$('#ttl').textContent={dash:'Dashboard Customer Experience',input:'Input Data Komplain',set:'Pengaturan',usr:'Tambah User'}[v]};
 $('#cUrl').value=cfg.url;$('#cTok').value=cfg.token;
 $('#bCfg').onclick=()=>{cfg={url:$('#cUrl').value.trim(),token:$('#cTok').value.trim()};try{localStorage.setItem(LS,JSON.stringify(cfg))}catch(e){}toast('Tersimpan, menghubungkan…');reload()};
 $('#bRef').onclick=reload;
@@ -428,5 +446,37 @@ async function exportPPT(){
  await p.writeFile({fileName:`Laporan-Komplain-${today()}.pptx`});toast('PPT berhasil dibuat');
  }catch(e){toast('Gagal membuat PPT: '+e.message)}finally{b.disabled=false;b.textContent='Ekspor PPT'}}
 
-reload();
+/* ---------- Login (sesi tersimpan di perangkat, hanya berakhir saat Keluar) ---------- */
+const SK='cxk-ses',post=b=>fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:cfg.token,...b})});
+try{const x=JSON.parse(localStorage.getItem(SK)||'null');if(x&&x.s)ses=x}catch(e){}
+const showLogin=()=>{$('#login').classList.add('on');setTimeout(()=>$('#lUser').focus(),50)},hideLogin=()=>$('#login').classList.remove('on');
+function afterLogin(){hideLogin();$('#uMe').textContent=ses.u;$('#aOut').textContent='Keluar ('+ses.u+')'}
+function logout(auto){
+ if(!auto&&cfg.url&&ses.s)post({action:'logout',session:ses.s}).catch(()=>{});
+ ses={s:'',u:''};try{localStorage.removeItem(SK)}catch(e){}
+ rows=[];refresh();$('#lPin').value='';$('#lErr').textContent=auto?'Sesi berakhir, silakan masuk lagi':'';showLogin()}
+async function doLogin(){const u=$('#lUser').value.trim(),pn=$('#lPin').value.trim(),b=$('#lBtn'),er=$('#lErr');
+ if(!u||!pn){er.textContent='Isi username dan PIN';return}
+ b.disabled=true;b.textContent='Memeriksa…';er.textContent='';
+ try{const j=await(await post({action:'login',user:u,pin:pn})).json();if(!j.ok)throw new Error(j.error);
+  ses={s:j.session,u:j.user};try{localStorage.setItem(SK,JSON.stringify(ses))}catch(e){}
+  $('#lPin').value='';afterLogin();reload()}
+ catch(e){er.textContent=e.message==='Failed to fetch'?'Tidak bisa terhubung ke server':e.message}
+ finally{b.disabled=false;b.textContent='Masuk'}}
+$('#lBtn').onclick=doLogin;
+['#lUser','#lPin'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()}));
+$('#aOut').onclick=()=>{if(confirm('Keluar dari dashboard di perangkat ini?'))logout(false)};
+$('#bUsr').onclick=async()=>{
+ if(!cfg.url)return toast('Mode demo: tidak bisa menambah user');
+ const nm=$('#uNm').value.trim(),p1=$('#uPn').value.trim(),p2=$('#uPn2').value.trim(),my=$('#uMy').value.trim();
+ if(!nm||!p1||!my)return toast('Lengkapi semua kolom');
+ if(!/^\d{4,8}$/.test(p1))return toast('PIN baru harus 4–8 angka');
+ if(p1!==p2)return toast('Ulangi PIN baru tidak sama');
+ const b=$('#bUsr');b.disabled=true;b.textContent='Menyimpan…';
+ try{const j=await api('adduser',{name:nm,pin:p1,myPin:my});if(!j.ok)throw new Error(j.error);
+  toast('User "'+nm+'" berhasil ditambahkan');['#uNm','#uPn','#uPn2','#uMy'].forEach(i=>$(i).value='')}
+ catch(e){toast('Gagal: '+e.message,6000)}finally{b.disabled=false;b.textContent='Tambah User'}};
+if(!cfg.url){hideLogin();$('#aOut').style.display='none';reload()}
+else if(ses.s){afterLogin();reload()}
+else showLogin();
 </script></body></html>
