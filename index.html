@@ -61,6 +61,8 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 .lbox h2{margin:0;font-size:18px}.lbox label{font-size:12px;color:var(--mu);font-weight:600;display:grid;gap:4px}
 .lbox input{width:100%;background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:11px 12px;font-size:15px}
 #lErr{color:var(--rd);font-size:13px;min-height:18px;margin:0}
+.app.crm #bCsv,.app.crm #bXls,.app.crm #bPdf,.app.crm #bPpt{display:none}
+.mut{color:var(--mu)}.w-ok{color:var(--ac)}.w-bad{color:var(--rd)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:1100px){.app,.app.np{display:block;height:auto}aside{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-right:0;border-bottom:1px solid var(--line)}aside .logo{display:none}aside a{white-space:nowrap;margin:0}main{overflow:visible}.panel{border-left:0;border-top:1px solid var(--line)}.chat{max-height:420px}}
 @media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.row,.row3,.form{grid-template-columns:1fr}.donut{flex-direction:column;align-items:flex-start}.fbar .seg{margin-left:0}}
@@ -76,15 +78,29 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
  table{min-width:0;font-size:10px}.bar i{animation:none}
 }
 </style></head><body>
-<div class="app" id="app">
+<div class="app np crm" id="app">
 <aside><div class="logo"><b>CX</b>Komplain CX</div>
-<a data-v="dash" class="on">Dashboard</a><a data-v="input">Input Data</a><a data-v="usr">Tambah User</a><a data-v="set">Pengaturan</a><a id="aOut" style="margin-top:14px;color:var(--rd)">Keluar</a></aside>
+<a data-v="crm" class="on">CRM</a><a data-v="dash">CX Komplain</a><a data-v="input">Input Data</a><a data-v="usr">Tambah User</a><a data-v="set">Pengaturan</a><a id="aOut" style="margin-top:14px;color:var(--rd)">Keluar</a></aside>
 
 <main>
-<header><h1 id="ttl">Dashboard Customer Experience</h1><span class="live" id="st">Memuat…</span><button id="bRef">Muat Ulang</button>
+<header><h1 id="ttl">Dashboard CRM</h1><span class="live" id="st">Memuat…</span><button id="bRef">Muat Ulang</button>
 <button id="bCsv" title="Data mentah sesuai filter & periode">Ekspor CSV</button><button id="bXls" title="Data mentah + ringkasan sesuai filter & periode">Ekspor Excel</button><button id="bPdf">Ekspor PDF</button><button class="pri" id="bPpt">Ekspor PPT</button></header>
 
-<div class="v on" id="v-dash">
+<div class="v on" id="v-crm">
+<section class="fbar"><span class="live" id="cSt">Memuat…</span>
+<div class="seg" id="cper"><button data-p="7">7H</button><button data-p="30" class="on">30H</button><button data-p="90">90H</button></div></section>
+<section class="kpis" id="cK"></section>
+<section class="row"><div class="card"><div class="hd"><h3>Won vs Lost Revenue Harian</h3></div><div id="cTrend"></div></div>
+<div class="card"><div class="hd"><h3>Alasan Pembatalan (Lost)</h3></div><div id="cLost"></div></div></section>
+<section class="row"><div class="card"><div class="hd"><h3>Mapping Geografi (Won Revenue)</h3><div class="seg" id="cgSeg"><button data-g="prov" class="on">Provinsi</button><button data-g="city">Kota/Kab</button></div></div><div id="cGeo"></div></div>
+<div class="card"><div class="hd"><h3>Mapping Produk (Won Revenue)</h3></div><div id="cProd"></div></div></section>
+<section class="row3"><div class="card"><div class="hd"><h3>Metode Pembayaran</h3></div><div id="cPay"></div></div>
+<div class="card"><div class="hd"><h3>Sumber Order (Video/LIVE/Kartu)</h3></div><div id="cChn"></div></div>
+<div class="card"><div class="hd"><h3>Varian Terlaris</h3></div><div id="cVar"></div></div></section>
+<section class="card" style="margin-top:14px"><div class="hd"><h3>Mapping Creator</h3><span class="note">Kosong = order tanpa creator (organik)</span></div>
+<div class="tw"><table><thead><tr><th>#</th><th>Creator</th><th>Order Won</th><th>Won Revenue</th><th>Lost Revenue</th><th>Win Rate</th></tr></thead><tbody id="cCr"></tbody></table></div></section>
+</div>
+<div class="v" id="v-dash">
 <section class="fbar"><div class="fsel" id="fsel"></div><button id="bRst">Reset filter</button>
 <div class="seg" id="per"><button data-p="7">7H</button><button data-p="30" class="on">30H</button><button data-p="90">90H</button></div></section>
 
@@ -151,7 +167,7 @@ const OPT={
  fak:['Internal','Eksternal'],
  jen:['Fullfilment','Logistik','Miss Information'],
  sol:['Tukar','Pengembalian','Kirim Ulang']};
-const DEFAULT_URL='https://script.google.com/macros/s/AKfycbzVhL5k72Um5juMQPnoD-Drk1G19vFNzCGc2ZlPAXNv2lQEZHiHZ6Wkq4C-krhbaC4YNw/exec',
+const DEFAULT_URL='https://script.google.com/macros/s/AKfycbyRb7aqaDG7t7qaTteECewu8qM0F9rN8WGTZM5MdRUmChtVVaYkSoF8FxOmr76UdqtnPA/exec',
 DEFAULT_TOKEN='1T-JawA4dPNTrNmdwPBLI90oKRwpm7kL4cKgrTQHPaPw'; // langsung terhubung tanpa menu Pengaturan
 /* ============================================================================== */
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -331,7 +347,7 @@ $('#qs').oninput=e=>{q=e.target.value;lim=10;tbl()};$('#bMore').onclick=()=>{lim
 $('#dlg').addEventListener('click',e=>{if(e.target===$('#dlg'))$('#dlg').close()});
 document.querySelector('aside').onclick=e=>{const a=e.target.closest('a[data-v]');if(!a)return;const v=a.dataset.v;
  document.querySelectorAll('aside a').forEach(x=>x.classList.toggle('on',x===a));document.querySelectorAll('.v').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
- $('#app').classList.toggle('np',v!=='dash');$('#ttl').textContent={dash:'Dashboard Customer Experience',input:'Input Data Komplain',set:'Pengaturan',usr:'Tambah User'}[v]};
+ $('#app').classList.toggle('np',v!=='dash');$('#ttl').textContent={crm:'Dashboard CRM',dash:'Dashboard Customer Experience',input:'Input Data Komplain',set:'Pengaturan',usr:'Tambah User'}[v]};
 $('#cUrl').value=cfg.url;$('#cTok').value=cfg.token;
 $('#bCfg').onclick=()=>{cfg={url:$('#cUrl').value.trim(),token:$('#cTok').value.trim()};try{localStorage.setItem(LS,JSON.stringify(cfg))}catch(e){}toast('Tersimpan, menghubungkan…');reload()};
 $('#bRef').onclick=reload;
@@ -450,11 +466,56 @@ async function exportPPT(){
  await p.writeFile({fileName:`Laporan-Komplain-${today()}.pptx`});toast('PPT berhasil dibuat');
  }catch(e){toast('Gagal membuat PPT: '+e.message)}finally{b.disabled=false;b.textContent='Ekspor PPT'}}
 
+/* ---------- CRM ---------- */
+let crm=[],cper=30,cgeo='prov';
+/* Definisi: Lost = dibatalkan/gagal/retur; Open = belum dibayar; selain itu Won (sudah dibayar & tidak batal) */
+const kd=r=>/batal|cancel|gagal|retur/i.test(r.st)?'l':/belum dibayar|unpaid/i.test(r.st)?'o':'w';
+const pnm=s=>{s=String(s||'');const t=s.replace(/[【\[][^】\]]*[】\]]/g,'').replace(/\s+/g,' ').trim();return t.length>=5?t:s.trim()};
+async function crmLoad(){if(!cfg.url||!ses.s)return;const st=$('#cSt');st.textContent='Memuat…';st.classList.remove('off');
+ try{const j=await fin(await fetch(cfg.url+'?action=crm&token='+encodeURIComponent(cfg.token)+'&session='+encodeURIComponent(ses.s)));
+  if(!j.ok)throw new Error(j.error);
+  crm=j.rows.map(a=>({id:a[0],st:a[1],amt:+a[2]||0,ref:+a[3]||0,tgl:ymd(a[4]),prod:a[5],vr:a[6],qty:+a[7]||1,prov:a[8],city:a[9],pay:a[10],chn:a[11],cr:a[12],cby:a[13],crs:a[14]})).filter(r=>!isNaN(r.tgl));
+  st.textContent='Terhubung · '+crm.length+' order';crmRender()}
+ catch(e){st.textContent='Gagal memuat';st.classList.add('off');toast('CRM gagal dimuat: '+e.message+' (sudah deploy versi baru Code.gs?)',8000)}}
+const agg=(a,kf)=>{const m=new Map();a.forEach(r=>{const k=kf(r)||'(kosong)',x=m.get(k)||{w:0,n:0,l:0,ln:0},d=kd(r);if(d==='w'){x.w+=r.amt;x.n++}else if(d==='l'){x.l+=r.amt;x.ln++}m.set(k,x)});return[...m].sort((a,b)=>b[1].w-a[1].w||b[1].l-a[1].l)};
+function cBars(id,a,top,tipf){const tot=a.reduce((s,x)=>s+x[1].w,0)||1,t=a.slice(0,top),mx=t[0]?t[0][1].w||1:1;
+ $(id).innerHTML=t.map(([k,v],i)=>`<div class="bar" data-tip="${esc(k)}: ${rp(v.w)} · ${v.n} order won"><p><span style="color:var(--tx)"><b>${i+1}.</b> ${esc(k.length>46?k.slice(0,45)+'…':k)}</span><span>${rp(v.w)} · ${v.n} order · ${Math.round(v.w/tot*100)}%</span></p><div><i style="width:${v.w/mx*100}%;background:${cv(i)}"></i></div></div>`).join('')||'<div class="empty">Belum ada data</div>'}
+function crmRender(){
+ let mx=0;crm.forEach(r=>{if(r.tgl<=Date.now()+DAY&&r.tgl>mx)mx=r.tgl});if(!mx)mx=Date.now();
+ const st=mx-(cper-1)*DAY,cur=crm.filter(r=>r.tgl>=st&&r.tgl<=mx),prev=crm.filter(r=>r.tgl<st&&r.tgl>=st-cper*DAY);
+ const sm=(a,k)=>a.filter(r=>kd(r)===k).reduce((s,r)=>s+r.amt,0),W=sm(cur,'w'),L=sm(cur,'l'),O=sm(cur,'o'),Wp=sm(prev,'w'),
+  nw=cur.filter(r=>kd(r)==='w').length,nl=cur.filter(r=>kd(r)==='l').length,wr=nw+nl?Math.round(nw/(nw+nl)*100):0,dp=Wp?Math.round((W-Wp)/Wp*100):null;
+ $('#cK').innerHTML=[['Won Revenue',rp(W),dp===null?'<span class="mut">periode terpilih</span>':`<span class="${dp>=0?'up':'dn'}">${dp>=0?'▲':'▼'} ${Math.abs(dp)}% vs periode lalu</span>`],
+  ['Lost Revenue',rp(L),`<span class="mut">${nl} order dibatalkan</span>`],
+  ['Win Rate',wr+'%',`<span class="mut">${nw} won · ${nl} lost</span>`],
+  ['Belum Dibayar',rp(O),`<span class="mut">${cur.filter(r=>kd(r)==='o').length} order · AOV won ${nw?rp(W/nw):'Rp0'}</span>`]].map(k=>`<div class="card kpi"><small>${k[0]}</small><b>${k[1]}</b>${k[2]}</div>`).join('');
+ /* tren won vs lost */
+ const days=[];for(let t=st;t<=mx;t+=DAY)days.push(t);const dw=[],dl=[];
+ days.forEach(t=>{const a=cur.filter(r=>r.tgl>=t&&r.tgl<t+DAY);dw.push(sm(a,'w'));dl.push(sm(a,'l'))});
+ const M=Math.max(1,...dw.map((v,i)=>v+dl[i])),Wd=420,P=8,B=140,PH=124,bw=(Wd-2*P)/days.length;
+ $('#cTrend').innerHTML=cur.length?`<div class="lg2"><span><i style="background:var(--c1)"></i>Won</span><span><i style="background:var(--rd)"></i>Lost</span><span style="margin-left:auto">puncak ${rp(M)}/hari</span></div><svg viewBox="0 0 ${Wd} 156" width="100%" role="img" aria-label="Won dan lost revenue harian"><line x1="${P}" x2="${Wd-P}" y1="${B}" y2="${B}" stroke="var(--line)"/>${days.map((t,i)=>{const hw=dw[i]/M*PH,hl=dl[i]/M*PH,x=P+i*bw,xb=(x+bw*.15).toFixed(1),w=(bw*.7).toFixed(1);
+  return`<rect x="${xb}" y="${(B-hw).toFixed(1)}" width="${w}" height="${hw.toFixed(1)}" fill="var(--c1)"/><rect x="${xb}" y="${(B-hw-hl).toFixed(1)}" width="${w}" height="${hl.toFixed(1)}" fill="var(--rd)"/><rect x="${x.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${B}" fill="transparent" data-tip="${fd(t)}: won ${rp(dw[i])} · lost ${rp(dl[i])}"/>`}).join('')}<text x="${P}" y="${B+14}" fill="var(--mu)" font-size="10">${fd(days[0])}</text><text x="${Wd-P}" y="${B+14}" text-anchor="end" fill="var(--mu)" font-size="10">${fd(mx)}</text></svg>`:'<div class="empty">Belum ada data di periode ini</div>';
+ /* alasan lost */
+ const lr=agg(cur.filter(r=>kd(r)==='l'),r=>(r.cby?r.cby+': ':'')+(r.crs||'Tanpa alasan')).map(([k,v])=>[k,{w:v.l,n:v.ln}]).sort((a,b)=>b[1].w-a[1].w);
+ const lt=lr.reduce((s,x)=>s+x[1].w,0)||1,lm=lr[0]?lr[0][1].w:1;
+ $('#cLost').innerHTML=lr.slice(0,7).map(([k,v])=>`<div class="bar"><p><span style="color:var(--tx)">${esc(k)}</span><span>${rp(v.w)} · ${v.n} order</span></p><div><i style="width:${v.w/lm*100}%;background:var(--rd)"></i></div></div>`).join('')||'<div class="empty">Tidak ada pembatalan</div>';
+ /* geografi, produk, payment, channel, varian */
+ cBars('#cGeo',agg(cur,r=>r[cgeo]),10);
+ cBars('#cProd',agg(cur,r=>pnm(r.prod)),8);
+ cBars('#cPay',agg(cur,r=>r.pay),8);cBars('#cChn',agg(cur,r=>r.chn),8);cBars('#cVar',agg(cur,r=>r.vr),8);
+ /* creator */
+ const ca=agg(cur,r=>r.cr||'Tanpa creator (organik)').slice(0,12);
+ $('#cCr').innerHTML=ca.map(([k,v],i)=>{const r=v.n+v.ln?Math.round(v.n/(v.n+v.ln)*100):0;return`<tr><td>${i+1}</td><td>${esc(k)}</td><td>${v.n}</td><td><b>${rp(v.w)}</b></td><td class="w-bad">${rp(v.l)}</td><td class="${r>=90?'w-ok':r<75?'w-bad':''}">${r}%</td></tr>`}).join('')||'<tr><td colspan="6" class="empty">Belum ada data</td></tr>'}
+$('#cper').onclick=e=>{const b=e.target.closest('button');if(!b)return;cper=+b.dataset.p;[...$('#cper').children].forEach(x=>x.classList.toggle('on',x===b));crmRender()};
+$('#cgSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;cgeo=b.dataset.g;[...$('#cgSeg').children].forEach(x=>x.classList.toggle('on',x===b));crmRender()};
+$('#bRef').addEventListener('click',crmLoad);
+document.querySelector('aside').addEventListener('click',e=>{const a=e.target.closest('a[data-v]');if(a)$('#app').classList.toggle('crm',a.dataset.v==='crm')});
+
 /* ---------- Login (sesi tersimpan di perangkat, hanya berakhir saat Keluar) ---------- */
 const SK='cxk-ses',post=b=>fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:cfg.token,...b})});
 try{const x=JSON.parse(localStorage.getItem(SK)||'null');if(x&&x.s)ses=x}catch(e){}
 const showLogin=()=>{$('#login').classList.add('on');setTimeout(()=>$('#lUser').focus(),50)},hideLogin=()=>$('#login').classList.remove('on');
-function afterLogin(){hideLogin();$('#uMe').textContent=ses.u;$('#aOut').textContent='Keluar ('+ses.u+')'}
+function afterLogin(){hideLogin();crmLoad();$('#uMe').textContent=ses.u;$('#aOut').textContent='Keluar ('+ses.u+')'}
 function logout(auto){
  if(!auto&&cfg.url&&ses.s)post({action:'logout',session:ses.s}).catch(()=>{});
  ses={s:'',u:''};try{localStorage.removeItem(SK)}catch(e){}
