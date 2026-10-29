@@ -2,6 +2,15 @@
 <html lang="id"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CX Komplain Dashboard</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0e19" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f9" media="(prefers-color-scheme: light)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CX Komplain">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -9,11 +18,12 @@
 :root{--bg:#0a0e19;--side:#0d1220;--card:#111726;--card2:#0c111e;--line:#1e2638;--tx:#e6e9f0;--mu:#8590a6;--ac:#a3e635;--acd:rgba(163,230,53,.14);--c1:#a3e635;--c2:#818cf8;--c3:#fb923c;--c4:#f472b6;--c5:#38bdf8;--c6:#facc15;--rd:#f87171;--inp:#0a0e19}
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3f5f9;--side:#fff;--card:#fff;--card2:#f6f8fb;--line:#e1e6ee;--tx:#182033;--mu:#667389;--ac:#4d7c0f;--acd:rgba(77,124,15,.12);--c1:#65a30d;--c2:#6366f1;--c3:#ea580c;--c4:#db2777;--c5:#0284c7;--c6:#ca8a04;--rd:#dc2626;--inp:#fff}}
 html,body{height:100%}*{box-sizing:border-box}
-body{margin:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--bg);color:var(--tx);font:14px/1.45 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--bg);color:var(--tx);font:14px/1.45 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
 .app{display:grid;grid-template-columns:190px minmax(0,1fr) 330px;height:100%}.app.np{grid-template-columns:190px minmax(0,1fr)}.app.np .panel{display:none}
 aside{background:var(--side);border-right:1px solid var(--line);padding:20px 14px;overflow:auto}
 .logo{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:24px}.logo b{background:var(--ac);color:#0a0e19;border-radius:8px;padding:7px 8px;font-size:12px}
 aside a{display:block;padding:9px 12px;border-radius:8px;color:var(--mu);font-weight:500;margin-bottom:2px;cursor:pointer}aside a.on{background:var(--acd);color:var(--tx)}
+.ic{display:none}.mo{display:none}
 main{overflow:auto;padding:0 22px 22px;min-width:0}
 header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 0;position:sticky;top:0;background:var(--bg);z-index:3}
 header h1{font-size:18px;margin:0 auto 0 0;display:flex;gap:10px;align-items:center}
@@ -52,7 +62,7 @@ td.kt{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 .form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.form label{display:block;font-size:12px;color:var(--mu);font-weight:600;margin-bottom:4px}
 .form input,.form select,.form textarea,.cfg input{width:100%;background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:9px 10px}.form textarea{resize:vertical}
 .cfg{max-width:560px;display:grid;gap:12px}.cfg label{font-size:12px;color:var(--mu);font-weight:600}.note{color:var(--mu);font-size:12px;margin:0}
-#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-weight:600;display:none;z-index:9;max-width:92vw}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-weight:600;display:none;z-index:60;max-width:92vw}
 #tip{position:fixed;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;z-index:20;display:none;max-width:260px}
 dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:12px;width:min(520px,92vw);padding:18px}dialog::backdrop{background:rgba(0,0,0,.6)}
 .dl{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:13px}.dl dt{color:var(--mu)}.dl dd{margin:0;word-break:break-word}
@@ -63,7 +73,32 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 #lErr{color:var(--rd);font-size:13px;min-height:18px;margin:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:1100px){.app,.app.np{display:block;height:auto}aside{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-right:0;border-bottom:1px solid var(--line)}aside .logo{display:none}aside a{white-space:nowrap;margin:0}main{overflow:visible}.panel{border-left:0;border-top:1px solid var(--line)}.chat{max-height:420px}}
-@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.row,.row3,.form{grid-template-columns:1fr}.donut{flex-direction:column;align-items:flex-start}.fbar .seg{margin-left:0}}
+@media (max-width:760px){
+ .kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi b{font-size:22px}.row,.row3,.form{grid-template-columns:1fr}.donut{flex-direction:column;align-items:flex-start}.fbar .seg{margin-left:0}
+ /* tampilan mobile: navigasi bawah seperti aplikasi */
+ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));border:0;border-top:1px solid var(--line);overflow:visible}
+ aside a{text-align:center;font-size:10.5px;padding:6px 2px;margin:0;border-radius:10px;line-height:1.25}
+ aside .ic{display:block;font-size:19px;line-height:1.1;margin-bottom:2px}.mo{display:block}aside #aOut{display:none}
+ main{padding:0 14px calc(92px + env(safe-area-inset-bottom,0px))}
+ header{gap:8px;padding:12px 0}header h1{font-size:16px;flex:1 1 100%;margin:0}header button{padding:6px 10px;font-size:12px}
+ .fbar{gap:8px}.fsel{flex-wrap:nowrap;overflow-x:auto;width:100%;padding-bottom:4px;-webkit-overflow-scrolling:touch}.fsel select{flex:none}
+ .fbar select,.fbar input,.form input,.form select,.form textarea,.cfg input,.lbox input,#qs{font-size:16px!important}
+ .fbar select{padding:9px 10px}.form input,.form select,.form textarea,.cfg input{padding:12px}
+ button{min-height:40px}.seg button{min-height:34px}.chips button{min-height:36px}
+ #bSave,#bUsr,#bCfg,#bOut2,#bInst{width:100%;padding:13px}
+ #toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+ .dl{grid-template-columns:100px 1fr}
+ /* tabel jadi kartu */
+ table.cards{min-width:0}table.cards thead{display:none}
+ table.cards tr{display:block;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;background:var(--card2)}
+ table.cards td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right}
+ table.cards td::before{content:attr(data-l);color:var(--mu);text-align:left;flex:none}
+ table.cards td.kt{max-width:none;white-space:normal}
+ table.cards td.empty{display:block;text-align:center}table.cards td.empty::before{content:none}
+ /* panel analis jadi tab sendiri */
+ .app .panel{display:none}.app[data-v="ai"] .panel{display:flex;border-top:0;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+ .app[data-v="ai"] main{display:none}.app[data-v="ai"] .chat{max-height:none;min-height:55vh}
+}
 @media print{
  @page{size:A4 landscape;margin:10mm}
  :root,:root:not([data-theme="dark"]){--bg:#fff;--side:#fff;--card:#fff;--card2:#f6f8fb;--line:#d8dee8;--tx:#182033;--mu:#667389;--ac:#4d7c0f;--acd:rgba(77,124,15,.12);--c1:#65a30d;--c2:#6366f1;--c3:#ea580c;--c4:#db2777;--c5:#0284c7;--c6:#ca8a04;--rd:#dc2626;--inp:#fff}
@@ -76,9 +111,9 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
  table{min-width:0;font-size:10px}.bar i{animation:none}
 }
 </style></head><body>
-<div class="app" id="app">
+<div class="app" id="app" data-v="dash">
 <aside><div class="logo"><b>CX</b>Komplain CX</div>
-<a data-v="dash" class="on">Dashboard</a><a data-v="input">Input Data</a><a data-v="usr">Tambah User</a><a data-v="set">Pengaturan</a><a id="aOut" style="margin-top:14px;color:var(--rd)">Keluar</a></aside>
+<a data-v="dash" class="on"><span class="ic">📊</span>Dashboard</a><a data-v="input"><span class="ic">✍️</span>Input Data</a><a data-v="ai" class="mo"><span class="ic">💬</span>Analis</a><a data-v="usr"><span class="ic">👤</span>Tambah User</a><a data-v="set"><span class="ic">⚙️</span>Pengaturan</a><a id="aOut" style="margin-top:14px;color:var(--rd)">Keluar</a></aside>
 
 <main>
 <header><h1 id="ttl">Dashboard Customer Experience</h1><span class="live" id="st">Memuat…</span><button id="bRef">Muat Ulang</button>
@@ -103,14 +138,14 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 <div class="card"><div class="hd"><h3>Solusi yang Ditawarkan</h3></div><div id="bSol"></div></div></section>
 
 <section class="card" style="margin-top:14px"><div class="hd"><h3>Komplain Terbaru</h3><input id="qs" type="search" placeholder="Cari ID, channel, PIC, keterangan…" style="background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;min-width:220px"></div>
-<div class="tw"><table><thead><tr><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>Faktor</th><th>PIC</th><th>Solusi</th><th>Rating</th><th>Ongkir</th><th>Keterangan</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div class="tw"><table class="cards"><thead><tr><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>Faktor</th><th>PIC</th><th>Solusi</th><th>Rating</th><th>Ongkir</th><th>Keterangan</th></tr></thead><tbody id="tb"></tbody></table></div>
 <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span class="note" id="cntTb"></span><button id="bMore">Lihat lebih banyak</button></div></section>
 </div>
 
 <div class="v" id="v-input">
 <section class="card"><div class="hd"><h3>Input Komplain Harian</h3></div><form class="form" id="frm" onsubmit="return false"></form>
 <p class="note" id="fnote" style="margin:12px 0"></p><button class="pri" id="bSave">Simpan ke Sheet</button></section>
-<section class="card" style="margin-top:14px"><div class="hd"><h3>Data Terakhir Masuk</h3></div><div class="tw"><table><thead><tr><th>Baris</th><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>PIC</th><th>Keterangan</th><th></th></tr></thead><tbody id="tbi"></tbody></table></div></section>
+<section class="card" style="margin-top:14px"><div class="hd"><h3>Data Terakhir Masuk</h3></div><div class="tw"><table class="cards"><thead><tr><th>Baris</th><th>Tanggal</th><th>ID Pesanan</th><th>Channel</th><th>Jenis</th><th>PIC</th><th>Keterangan</th><th></th></tr></thead><tbody id="tbi"></tbody></table></div></section>
 </div>
 
 <div class="v" id="v-usr"><section class="card cfg"><h3 style="margin:0">Tambah User Baru</h3>
@@ -124,7 +159,9 @@ dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);borde
 <label>URL Web App (Apps Script)<input id="cUrl" placeholder="https://script.google.com/macros/s/…/exec"></label>
 <label>Token<input id="cTok" type="password" placeholder="sama dengan TOKEN di Code.gs"></label>
 <button class="pri" id="bCfg">Simpan & Hubungkan</button>
-<p class="note">Pengaturan disimpan di browser ini saja. Tanpa URL, dashboard tampil dengan data contoh.</p></section></div>
+<p class="note">Pengaturan disimpan di browser ini saja. Tanpa URL, dashboard tampil dengan data contoh.</p></section>
+<section class="card cfg" style="margin-top:14px"><h3 style="margin:0">Pasang sebagai aplikasi</h3><p class="note" id="pwaTxt"></p><button class="pri" id="bInst" style="display:none">Pasang aplikasi</button></section>
+<section class="card cfg" style="margin-top:14px"><h3 style="margin:0">Akun</h3><button id="bOut2" style="color:var(--rd)">Keluar</button></section></div>
 </main>
 
 <div class="panel"><div class="ph"><i></i><div><b>Analis Komplain</b><small>Ringkasan otomatis dari data</small></div></div>
@@ -285,8 +322,8 @@ function render(){const{cur,prev,st,mx}=scope(),n=cur.length,int=cur.filter(r=>r
  bars('#bJenis','jen');bars('#bPic','pic');bars('#bSol','sol');tbl()}
 
 function tbl(){const{cur}=scope(),qq=q.trim().toLowerCase(),all=cur.filter(r=>!qq||[r.id,r.ket,r.ch,r.pic,r.jen].join(' ').toLowerCase().includes(qq)).reverse();
- $('#tb').innerHTML=all.slice(0,lim).map(r=>{const d=r.ra-r.rb;return`<tr class="clk" data-row="${r.row}"><td>${fd(r.tgl)}</td><td>${esc(r.id)}</td><td>${esc(r.ch)}</td><td>${esc(r.jen)}</td><td><span class="tag ${r.fak==='Internal'?'t-int':'t-ext'}">${esc(r.fak)}</span></td><td>${esc(r.pic)}</td><td>${esc(r.sol)}</td><td>${r.rb} → <b class="${d>=0?'up':'dn'}">${r.ra}</b></td><td>${rp(r.ong)}</td><td class="kt">${esc(r.ket)}</td></tr>`}).join('')||'<tr><td colspan="10" class="empty">Tidak ada data</td></tr>';
- $('#cntTb').textContent=all.length?`Menampilkan ${Math.min(lim,all.length)} dari ${all.length}. Klik baris untuk detail.`:'';$('#bMore').style.display=all.length>lim?'':'none'}
+ $('#tb').innerHTML=all.slice(0,lim).map(r=>{const d=r.ra-r.rb;return`<tr class="clk" data-row="${r.row}"><td data-l="Tanggal">${fd(r.tgl)}</td><td data-l="ID Pesanan">${esc(r.id)}</td><td data-l="Channel">${esc(r.ch)}</td><td data-l="Jenis">${esc(r.jen)}</td><td data-l="Faktor"><span class="tag ${r.fak==='Internal'?'t-int':'t-ext'}">${esc(r.fak)}</span></td><td data-l="PIC">${esc(r.pic)}</td><td data-l="Solusi">${esc(r.sol)}</td><td data-l="Rating">${r.rb} → <b class="${d>=0?'up':'dn'}">${r.ra}</b></td><td data-l="Ongkir">${rp(r.ong)}</td><td class="kt" data-l="Keterangan">${esc(r.ket)}</td></tr>`}).join('')||'<tr><td colspan="10" class="empty">Tidak ada data</td></tr>';
+ $('#cntTb').textContent=all.length?`Menampilkan ${Math.min(lim,all.length)} dari ${all.length}. Ketuk baris untuk detail.`:'';$('#bMore').style.display=all.length>lim?'':'none'}
 function detail(row){const r=rows.find(x=>x.row===row);if(!r)return;const d=r.ra-r.rb;
  $('#dB').innerHTML=[['Tanggal',new Date(r.tgl).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})],['ID Pesanan',r.id],['Channel',r.ch],['PIC Packing',r.pic],['Faktor',r.fak],['Jenis',r.jen],['Solusi',r.sol],['Rating',`${r.rb} → ${r.ra} (${d>=0?'+':''}${d})`],['Biaya pengiriman',rp(r.ong)],['Pendapatan seller',rp(r.pen)],['Keterangan',r.ket||'-'],['Baris di sheet',r.row]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')+`<dt>Saran kasus ini</dt><dd><ul style="margin:0;padding-left:16px">${caseAdv(r).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></dd>`;$('#dlg').showModal()}
 
@@ -316,7 +353,7 @@ $('#bSave').onclick=async()=>{
  const b=$('#bSave');b.disabled=true;b.textContent='Menyimpan…';
  try{const j=await api('add',{data:d});if(!j.ok)throw new Error(j.error);toast('Tersimpan di baris '+j.row);['id','rb','ra','ong','pen','ket'].forEach(k=>$('#f_'+k).value='');$('#f_id').focus();await reload()}
  catch(e){toast('Gagal menyimpan: '+e.message)}finally{b.disabled=false;b.textContent='Simpan ke Sheet'}};
-function recent(){$('#tbi').innerHTML=[...rows].sort((a,b)=>b.row-a.row).slice(0,8).map(r=>`<tr><td>${r.row}</td><td>${fd(r.tgl)}</td><td>${esc(r.id)}</td><td>${esc(r.ch)}</td><td>${esc(r.jen)}</td><td>${esc(r.pic)}</td><td class="kt">${esc(r.ket)}</td><td><button data-del="${r.row}">Hapus</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Belum ada data</td></tr>'}
+function recent(){$('#tbi').innerHTML=[...rows].sort((a,b)=>b.row-a.row).slice(0,8).map(r=>`<tr><td data-l="Baris">${r.row}</td><td data-l="Tanggal">${fd(r.tgl)}</td><td data-l="ID Pesanan">${esc(r.id)}</td><td data-l="Channel">${esc(r.ch)}</td><td data-l="Jenis">${esc(r.jen)}</td><td data-l="PIC">${esc(r.pic)}</td><td class="kt" data-l="Keterangan">${esc(r.ket)}</td><td><button data-del="${r.row}">Hapus</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Belum ada data</td></tr>'}
 $('#tbi').onclick=async e=>{const b=e.target.closest('[data-del]');if(!b)return;if(!cfg.url)return toast('Mode demo: tidak ada yang dihapus');
  if(!confirm('Hapus data di baris '+b.dataset.del+'? Baris di sheet akan dikosongkan.'))return;
  try{const j=await api('delete',{row:+b.dataset.del});if(!j.ok)throw new Error(j.error);toast('Dihapus');await reload()}catch(err){toast('Gagal menghapus: '+err.message)}};
@@ -326,12 +363,15 @@ $('main').addEventListener('click',e=>{const c=e.target.closest('[data-f]');if(c
  const r=e.target.closest('#tb tr[data-row]');if(r)detail(+r.dataset.row)});
 document.addEventListener('mousemove',e=>{const t=e.target.closest&&e.target.closest('[data-tip]'),tp=$('#tip');if(!t){tp.style.display='none';return}
  tp.textContent=t.dataset.tip;tp.style.display='block';tp.style.left=Math.max(8,Math.min(e.clientX+12,innerWidth-tp.offsetWidth-8))+'px';tp.style.top=(e.clientY+16)+'px'});
+document.addEventListener('touchstart',e=>{if(!e.target.closest('[data-tip]'))$('#tip').style.display='none'},{passive:true});
 $('#hmSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;hm=b.dataset.hm;$('#hmL').textContent=hm==='pic'?'PIC':'Channel';[...$('#hmSeg').children].forEach(x=>x.classList.toggle('on',x===b));render()};
 $('#qs').oninput=e=>{q=e.target.value;lim=10;tbl()};$('#bMore').onclick=()=>{lim+=10;tbl()};$('#dX').onclick=()=>$('#dlg').close();
 $('#dlg').addEventListener('click',e=>{if(e.target===$('#dlg'))$('#dlg').close()});
 document.querySelector('aside').onclick=e=>{const a=e.target.closest('a[data-v]');if(!a)return;const v=a.dataset.v;
  document.querySelectorAll('aside a').forEach(x=>x.classList.toggle('on',x===a));document.querySelectorAll('.v').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
- $('#app').classList.toggle('np',v!=='dash');$('#ttl').textContent={dash:'Dashboard Customer Experience',input:'Input Data Komplain',set:'Pengaturan',usr:'Tambah User'}[v]};
+ $('#app').classList.toggle('np',v!=='dash');$('#app').dataset.v=v;window.scrollTo(0,0);
+ $('#ttl').textContent={dash:'Dashboard Customer Experience',input:'Input Data Komplain',set:'Pengaturan',usr:'Tambah User',ai:'Analis Komplain'}[v]};
+matchMedia('(max-width:760px)').addEventListener('change',m=>{if(!m.matches&&$('#app').dataset.v==='ai')document.querySelector('aside a[data-v="dash"]').click()});
 $('#cUrl').value=cfg.url;$('#cTok').value=cfg.token;
 $('#bCfg').onclick=()=>{cfg={url:$('#cUrl').value.trim(),token:$('#cTok').value.trim()};try{localStorage.setItem(LS,JSON.stringify(cfg))}catch(e){}toast('Tersimpan, menghubungkan…');reload()};
 $('#bRef').onclick=reload;
@@ -454,7 +494,7 @@ async function exportPPT(){
 const SK='cxk-ses',post=b=>fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:cfg.token,...b})});
 try{const x=JSON.parse(localStorage.getItem(SK)||'null');if(x&&x.s)ses=x}catch(e){}
 const showLogin=()=>{$('#login').classList.add('on');setTimeout(()=>$('#lUser').focus(),50)},hideLogin=()=>$('#login').classList.remove('on');
-function afterLogin(){hideLogin();$('#uMe').textContent=ses.u;$('#aOut').textContent='Keluar ('+ses.u+')'}
+function afterLogin(){hideLogin();$('#uMe').textContent=ses.u;$('#aOut').textContent='Keluar ('+ses.u+')';$('#bOut2').textContent='Keluar ('+ses.u+')'}
 function logout(auto){
  if(!auto&&cfg.url&&ses.s)post({action:'logout',session:ses.s}).catch(()=>{});
  ses={s:'',u:''};try{localStorage.removeItem(SK)}catch(e){}
@@ -476,7 +516,8 @@ $('#lTest').onclick=async()=>{lcfg();const i=$('#lInfo');i.textContent='Menguji�
  catch(e){i.textContent='Tidak bisa terhubung. Cek URL Web App dan akses deployment ("Anyone").'}};
 $('#lBtn').onclick=doLogin;
 ['#lUser','#lPin'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()}));
-$('#aOut').onclick=()=>{if(confirm('Keluar dari dashboard di perangkat ini?'))logout(false)};
+const askOut=()=>{if(confirm('Keluar dari dashboard di perangkat ini?'))logout(false)};
+$('#aOut').onclick=askOut;$('#bOut2').onclick=askOut;
 $('#bUsr').onclick=async()=>{
  if(!cfg.url)return toast('Mode demo: tidak bisa menambah user');
  const nm=$('#uNm').value.trim(),p1=$('#uPn').value.trim(),p2=$('#uPn2').value.trim(),my=$('#uMy').value.trim();
@@ -487,7 +528,17 @@ $('#bUsr').onclick=async()=>{
  try{const j=await api('adduser',{name:nm,pin:p1,myPin:my});if(!j.ok)throw new Error(j.error);
   toast('User "'+nm+'" berhasil ditambahkan');['#uNm','#uPn','#uPn2','#uMy'].forEach(i=>$(i).value='')}
  catch(e){toast('Gagal: '+e.message,6000)}finally{b.disabled=false;b.textContent='Tambah User'}};
-if(!cfg.url){hideLogin();$('#aOut').style.display='none';reload()}
+
+/* ---------- Aplikasi (PWA) ---------- */
+let dip=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#bInst').style.display=''});
+window.addEventListener('appinstalled',()=>{dip=null;$('#bInst').style.display='none';toast('Aplikasi terpasang')});
+$('#bInst').onclick=async()=>{if(!dip)return;dip.prompt();try{await dip.userChoice}catch(e){}dip=null;$('#bInst').style.display='none'};
+{const ios=/iphone|ipad|ipod/i.test(navigator.userAgent),sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+ $('#pwaTxt').textContent=sa?'Aplikasi sudah terpasang dan sedang dibuka dalam mode aplikasi.':ios?'iPhone/iPad: buka halaman ini di Safari, ketuk tombol Bagikan, lalu pilih "Tambahkan ke Layar Utama".':'Android (Chrome): ketuk menu ⋮ lalu pilih "Instal aplikasi" atau "Tambahkan ke layar utama". Kalau tombol di bawah muncul, kamu juga bisa memakainya.'}
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+if(!cfg.url){hideLogin();$('#aOut').style.display='none';$('#bOut2').style.display='none';reload()}
 else if(ses.s){afterLogin();reload()}
 else showLogin();
 </script></body></html>
